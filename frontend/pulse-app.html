@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UpWise — AI-маркетинг для вашего бизнеса</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg: #FBFAF6;
+  --bg-soft: #F5F2EA;
+  --surface: #FFFFFF;
+  --surface-2: #F7F4ED;
+  --surface-3: #EFEAE0;
+  --border: #E9E3D6;
+  --border-soft: #F0EBE0;
+  --text: #26251F;
+  --text-dim: #726C5E;
+  --text-faint: #A39C8A;
+
+  /* one primary accent (sage) + one small secondary accent (dusty plum) */
+  --accent: #4B7F63;
+  --accent-dim: #6FA087;
+  --accent-strong: #396551;
+  --accent-soft: #4B7F6316;
+  --accent-soft-2: #4B7F630B;
+  --plum: #8C6FAE;
+  --plum-soft: #8C6FAE17;
+
+  --mint: #3F9C74;
+  --mint-soft: #3F9C741A;
+  --amber: #C08A3D;
+  --amber-soft: #C08A3D1C;
+  --rose: #BD5B52;
+  --rose-soft: #BD5B521A;
+
+  --grad-1: linear-gradient(135deg, #4B7F63 0%, #6FA087 100%);
+  --grad-2: radial-gradient(circle, #4B7F63 0%, transparent 70%);
+
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --radius-s: 10px;
+  --radius-m: 18px;
+  --radius-l: 26px;
+
+  --shadow-card: 0 1px 0 rgba(38,37,31,0.02) inset, 0 14px 32px -20px rgba(64,58,38,0.16);
+  --shadow-hover: 0 1px 0 rgba(38,37,31,0.02) inset, 0 22px 44px -18px rgba(64,58,38,0.22);
+  --ease: cubic-bezier(.22,.7,.32,1);
+  --sidebar-w: 256px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--accent); color:#fff;}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer;}
+ul{list-style:none;}
+input, select, textarea{font-family:inherit;}
+::-webkit-scrollbar{width:9px; height:9px;}
+::-webkit-scrollbar-thumb{background:var(--border); border-radius:8px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text-faint);}
+::-webkit-scrollbar-track{background:transparent;}
+:focus-visible{ outline:2px solid var(--accent-dim); outline-offset:2px; border-radius:6px; }
+@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+
+.mono{font-family:var(--font-mono);}
+.dim{color:var(--text-dim);}
+.faint{color:var(--text-faint);}
+
+/* ============ PULSE SIGNATURE — breathing orb ============ */
+.pulse-orb{
+  position:relative; width:38px; height:38px; border-radius:50%;
+  background:var(--grad-1);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  box-shadow:0 4px 14px -4px #4B7F6355;
+}
+.pulse-orb::before{
+  content:''; position:absolute; inset:-6px; border-radius:50%;
+  background:radial-gradient(circle, #4B7F6333 0%, transparent 70%);
+  animation:breathe 3.2s var(--ease) infinite;
+}
+@keyframes breathe{
+  0%,100%{ transform:scale(0.85); opacity:.55; }
+  50%{ transform:scale(1.35); opacity:0; }
+}
+.pulse-orb.sm{width:27px; height:27px;}
+.pulse-orb .core{width:8px; height:8px; border-radius:50%; background:#fff; box-shadow:0 0 10px 1px rgba(255,255,255,.9); position:relative; z-index:1;}
+
+/* ============ BUTTONS ============ */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  border-radius:12px; border:1px solid transparent; font-weight:600; font-size:14px;
+  padding:11px 20px; transition:transform .12s var(--ease), background .15s var(--ease), border-color .15s var(--ease), box-shadow .15s var(--ease), color .15s var(--ease);
+  white-space:nowrap;
+}
+.btn svg{width:16px; height:16px;}
+.btn:active{ transform:scale(.96); }
+.btn-primary{ background:var(--accent); color:#fff; box-shadow:0 10px 24px -10px #4B7F6377;}
+.btn-primary:hover{ background:var(--accent-strong); transform:translateY(-1px); box-shadow:0 14px 28px -10px #4B7F6390;}
+.btn-outline{ background:var(--surface); border-color:var(--border); color:var(--text); }
+.btn-outline:hover{ border-color:var(--text-faint); background:var(--surface-2); transform:translateY(-1px); }
+.btn-ghost{ background:transparent; color:var(--text-dim); padding:8px 12px; }
+.btn-ghost:hover{ color:var(--text); background:var(--surface-2); }
+.btn-sm{ padding:8px 14px; font-size:13px; border-radius:10px; }
+.btn-block{ width:100%; }
+.btn-danger{ background:var(--rose-soft); color:var(--rose); }
+.btn:disabled{ opacity:.6; cursor:not-allowed; transform:none !important; }
+
+/* ============ CARDS / BADGES / CHIPS ============ */
+.card{
+  background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius-m);
+  box-shadow:var(--shadow-card);
+  transition:box-shadow .25s var(--ease), transform .25s var(--ease), border-color .25s var(--ease);
+}
+.card.hoverable:hover{ box-shadow:var(--shadow-hover); transform:translateY(-2px); border-color:var(--border); }
+.badge{ display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; padding:4px 10px; border-radius:100px; }
+.badge-mint{ background:var(--mint-soft); color:var(--mint); }
+.badge-amber{ background:var(--amber-soft); color:var(--amber); }
+.badge-rose{ background:var(--rose-soft); color:var(--rose); }
+.badge-violet{ background:var(--plum-soft); color:var(--plum); }
+.badge-neutral{ background:var(--surface-3); color:var(--text-dim); }
+.chip{
+  display:inline-flex; align-items:center; gap:6px; padding:9px 15px; border-radius:11px;
+  background:var(--surface); border:1px solid var(--border); font-size:13px; font-weight:500; color:var(--text-dim);
+  cursor:pointer; transition:all .15s var(--ease);
+}
+.chip.active{ background:var(--accent-soft); border-color:#4B7F6340; color:var(--accent-strong); }
+.chip:hover{ border-color:var(--text-faint); transform:translateY(-1px); }
+.chip:active{ transform:scale(.97); }
+
+/* ============ TYPOGRAPHY ============ */
+h1,h2,h3,h4{ font-family:var(--font-display); font-weight:600; letter-spacing:-0.01em; }
+.eyebrow{ font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-strong); }
+
+/* ============ SKELETON / SHIMMER ============ */
+.skel{ position:relative; overflow:hidden; background:var(--surface-3); border-radius:10px; }
+.skel::after{
+  content:''; position:absolute; inset:0; transform:translateX(-100%);
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent);
+  animation:shimmer 1.6s infinite;
+}
+@keyframes shimmer{ 100%{ transform:translateX(100%); } }
+
+/* ============ BOOT LOADER ============ */
+.boot{ min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px; background:var(--bg); }
+.boot-orb{ width:64px; height:64px; }
+.boot-orb .pulse-orb{ width:64px; height:64px; }
+.boot-orb .core{ width:14px; height:14px; }
+.boot-msg{ font-size:14px; color:var(--text-dim); font-weight:500; min-height:20px; letter-spacing:.01em; }
+.boot-cards{ display:flex; gap:14px; margin-top:8px; }
+.boot-cards .skel{ width:150px; height:88px; border-radius:16px; }
+
+/* ============ TOASTS ============ */
+.toast-host{ position:fixed; bottom:22px; right:22px; display:flex; flex-direction:column; gap:10px; z-index:999; }
+.toast{
+  display:flex; align-items:center; gap:10px; background:var(--text); color:#fff; padding:12px 16px;
+  border-radius:13px; font-size:13.5px; font-weight:500; box-shadow:0 16px 34px -12px rgba(38,37,31,.4);
+  opacity:0; transform:translateY(8px) scale(.98); transition:all .3s var(--ease);
+}
+.toast.show{ opacity:1; transform:translateY(0) scale(1); }
+.toast.error{ background:var(--rose); }
+.toast-ic{ color:var(--accent-dim); display:flex; }
+.toast.error .toast-ic{ color:#fff; }
+.toast-ic svg{ width:16px; height:16px; }
+
+/* ============ LANDING ============ */
+.landing{ position:relative; background:var(--bg); }
+.aurora{ position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; }
+.aurora div{ position:absolute; border-radius:50%; filter:blur(120px); }
+.aurora .a1{ width:560px; height:560px; background:#4B7F63; opacity:.15; top:-180px; left:-120px; animation:drift1 34s ease-in-out infinite; }
+.aurora .a2{ width:480px; height:480px; background:#C08A3D; opacity:.10; top:60px; right:-160px; animation:drift2 38s ease-in-out infinite; }
+.aurora .a3{ width:420px; height:420px; background:#8C6FAE; opacity:.09; bottom:-200px; left:35%; animation:drift1 42s ease-in-out infinite reverse; }
+@keyframes drift1{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(40px,50px) scale(1.08);} }
+@keyframes drift2{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(-40px,30px) scale(1.04);} }
+
+.l-nav{ position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; padding:24px 48px; max-width:1360px; margin:0 auto; }
+.l-logo{ display:flex; align-items:center; gap:11px; font-family:var(--font-display); font-weight:700; font-size:19px; }
+.l-nav-links{ display:flex; align-items:center; gap:38px; }
+.l-nav-links a{ font-size:14px; color:var(--text-dim); font-weight:500; transition:color .15s; }
+.l-nav-links a:hover{ color:var(--text); }
+.l-nav-actions{ display:flex; align-items:center; gap:12px; }
+
+.hero{ position:relative; z-index:2; max-width:860px; margin:72px auto 0; text-align:center; padding:0 24px; animation:cardIn .7s var(--ease) both; }
+.hero h1{ font-size:clamp(42px,6vw,74px); line-height:1.06; margin-bottom:24px; font-weight:600; }
+.hero h1 .grad{ background:var(--grad-1); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero p{ font-size:18px; color:var(--text-dim); max-width:560px; margin:0 auto 36px; line-height:1.65; }
+.hero-actions{ display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:20px;}
+.hero-note{ font-size:13px; color:var(--text-faint); }
+
+.hero-preview{ position:relative; z-index:2; max-width:1040px; margin:68px auto 0; padding:0 24px 40px; animation:cardIn .8s .15s var(--ease) both; }
+.preview-frame{
+  border-radius:24px; border:1px solid var(--border-soft); background:var(--surface);
+  box-shadow:0 70px 130px -50px rgba(46,42,26,.35); overflow:hidden;
+}
+.preview-topbar{ display:flex; gap:6px; padding:15px 20px; border-bottom:1px solid var(--border-soft); background:var(--surface-2); }
+.preview-topbar span{ width:10px; height:10px; border-radius:50%; background:var(--border); }
+
+.logos-row{ position:relative; z-index:2; max-width:1000px; margin:60px auto 0; padding:28px 24px; text-align:center; }
+.logos-row .label{ font-size:12px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.12em; margin-bottom:24px; }
+.logos-grid{ display:flex; flex-wrap:wrap; gap:42px; justify-content:center; align-items:center; opacity:.6; font-family:var(--font-display); font-weight:600; font-size:16px; color:var(--text-dim); }
+
+.section{ position:relative; z-index:2; max-width:1200px; margin:0 auto; padding:130px 24px; }
+.section-head{ max-width:600px; margin:0 auto 58px; text-align:center; }
+.section-head h2{ font-size:clamp(28px,3.6vw,42px); margin-top:14px; line-height:1.18; }
+.section-head p{ color:var(--text-dim); margin-top:14px; font-size:16px; line-height:1.65; }
+
+.feat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+.feat-card{ padding:30px 26px; }
+.feat-icon{ width:46px; height:46px; border-radius:13px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; margin-bottom:22px; color:var(--accent-strong); }
+.feat-card h3{ font-size:17px; margin-bottom:9px; }
+.feat-card p{ font-size:14px; color:var(--text-dim); line-height:1.65; }
+
+.steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+.step{ position:relative; padding:34px 28px; }
+.step .num{ font-family:var(--font-mono); font-size:13px; color:var(--accent-strong); margin-bottom:20px; display:block; }
+.step h3{ font-size:18px; margin-bottom:11px; }
+.step p{ font-size:14px; color:var(--text-dim); line-height:1.65; }
+
+.quote-card{ max-width:760px; margin:0 auto; padding:52px; text-align:center; }
+.quote-card p{ font-family:var(--font-display); font-weight:500; font-size:24px; line-height:1.55; margin-bottom:24px; }
+.quote-who{ display:flex; align-items:center; justify-content:center; gap:12px; }
+.quote-avatar{ width:38px; height:38px; border-radius:50%; background:var(--grad-1); }
+
+.cta-banner{ position:relative; z-index:2; max-width:1200px; margin:0 auto 130px; padding:68px 48px; border-radius:32px; background:var(--surface-2); border:1px solid var(--border-soft); overflow:hidden; text-align:center; }
+.cta-banner::before{ content:''; position:absolute; width:420px; height:420px; background:var(--grad-2); top:-170px; right:-110px; opacity:.14; }
+.cta-banner h2{ font-size:clamp(26px,3.4vw,38px); position:relative; margin-bottom:16px; }
+.cta-banner p{ color:var(--text-dim); position:relative; margin-bottom:30px; }
+
+.l-footer{ position:relative; z-index:2; border-top:1px solid var(--border-soft); padding:42px 48px; display:flex; justify-content:space-between; align-items:center; max-width:1360px; margin:0 auto; font-size:13px; color:var(--text-faint); }
+
+@media(max-width:900px){
+  .feat-grid{ grid-template-columns:repeat(2,1fr); }
+  .steps{ grid-template-columns:1fr; }
+  .l-nav-links{ display:none; }
+}
+
+/* ============ LOGIN ============ */
+.login-wrap{ min-height:100vh; display:grid; grid-template-columns:1fr 1fr; }
+.login-brand{ position:relative; background:var(--surface-2); border-right:1px solid var(--border-soft); display:flex; flex-direction:column; justify-content:space-between; padding:48px; overflow:hidden; }
+.login-brand .aurora{ opacity:.9; }
+.login-brand-content{ position:relative; z-index:2; margin-top:auto; margin-bottom:auto; }
+.login-brand-content p{ font-family:var(--font-display); font-weight:500; font-size:28px; line-height:1.4; max-width:420px; }
+.login-brand-foot{ position:relative; z-index:2; font-size:13px; color:var(--text-dim); }
+.login-form-side{ display:flex; align-items:center; justify-content:center; padding:24px; background:var(--bg); overflow-y:auto; }
+.login-box{ width:100%; max-width:380px; animation:cardIn .5s var(--ease) both; padding:24px 0; }
+.login-tabs{ display:flex; gap:4px; background:var(--surface-2); padding:4px; border-radius:13px; margin-bottom:32px; border:1px solid var(--border-soft); }
+.login-tab{ flex:1; text-align:center; padding:9px 0; border-radius:10px; font-size:13px; font-weight:600; color:var(--text-dim); transition:all .15s var(--ease); }
+.login-tab.active{ background:var(--surface); color:var(--text); box-shadow:0 2px 8px -3px rgba(38,37,31,.15); }
+.field{ margin-bottom:16px; }
+.field label{ display:block; font-size:13px; font-weight:500; color:var(--text-dim); margin-bottom:7px; }
+.field input, .field select{ width:100%; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:11px 14px; color:var(--text); font-size:14px; outline:none; transition:border-color .15s var(--ease), box-shadow .15s var(--ease); }
+.field input:focus, .field select:focus{ border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-soft); }
+.field-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; font-size:13px; }
+.field-row a{ color:var(--accent-strong); }
+.divider-or{ display:flex; align-items:center; gap:12px; margin:22px 0; color:var(--text-faint); font-size:12px; }
+.divider-or::before, .divider-or::after{ content:''; flex:1; height:1px; background:var(--border); }
+
+/* ============ APP SHELL ============ */
+.app-shell{ display:flex; min-height:100vh; background:var(--bg); }
+.sidebar{ width:var(--sidebar-w); background:var(--surface); border-right:1px solid var(--border-soft); display:flex; flex-direction:column; position:fixed; top:0; bottom:0; left:0; z-index:20; transition:transform .25s var(--ease); }
+.sidebar-head{ display:flex; align-items:center; gap:10px; padding:24px 22px 20px; }
+.sidebar-head .name{ font-family:var(--font-display); font-weight:700; font-size:17px; }
+.sidebar-nav{ flex:1; padding:8px 14px; overflow-y:auto; }
+.nav-group-label{ font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--text-faint); padding:18px 12px 8px; font-weight:600; }
+.nav-item{ display:flex; align-items:center; gap:11px; padding:10px 12px; border-radius:11px; font-size:14px; font-weight:500; color:var(--text-dim); margin-bottom:2px; position:relative; transition:all .15s var(--ease); }
+.nav-item svg{ width:18px; height:18px; flex-shrink:0; }
+.nav-item:hover{ background:var(--surface-2); color:var(--text); }
+.nav-item.active{ background:var(--accent-soft); color:var(--accent-strong); }
+.nav-item.active svg{ color:var(--accent); }
+.nav-item.active::before{ content:''; position:absolute; left:-14px; top:50%; transform:translateY(-50%); width:3px; height:18px; background:var(--accent); border-radius:0 4px 4px 0; }
+.sidebar-foot{ padding:16px 18px 22px; border-top:1px solid var(--border-soft); display:flex; align-items:center; gap:10px; }
+.mini-avatar{ width:34px; height:34px; border-radius:50%; background:var(--grad-1); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:13px; flex-shrink:0; color:#fff; }
+.sidebar-foot .who{ flex:1; min-width:0; }
+.sidebar-foot .who .n{ font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sidebar-foot .who .r{ font-size:11px; color:var(--text-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sidebar-foot button{ color:var(--text-faint); background:transparent; border:none; padding:7px; border-radius:9px; transition:all .15s; }
+.sidebar-foot button:hover{ background:var(--surface-2); color:var(--text); }
+
+.main-area{ flex:1; margin-left:var(--sidebar-w); min-width:0; }
+.topbar{ position:sticky; top:0; z-index:10; height:70px; background:rgba(251,250,246,.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--border-soft); display:flex; align-items:center; justify-content:space-between; padding:0 30px; }
+.topbar h1{ font-size:19px; }
+.topbar-sub{ font-size:12px; color:var(--text-faint); margin-top:2px; }
+.topbar-actions{ display:flex; align-items:center; gap:14px; }
+.search-box{ display:flex; align-items:center; gap:8px; background:var(--surface-2); border:1px solid var(--border); border-radius:11px; padding:9px 13px; width:230px; color:var(--text-faint); transition:border-color .15s; }
+.search-box:focus-within{ border-color:var(--accent); }
+.search-box input{ background:transparent; border:none; outline:none; color:var(--text); font-size:13px; width:100%; }
+.icon-btn{ width:37px; height:37px; border-radius:11px; background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-dim); position:relative; transition:all .15s var(--ease); }
+.icon-btn:hover{ color:var(--text); background:var(--surface-2); transform:translateY(-1px); }
+.icon-btn .dot{ position:absolute; top:7px; right:7px; width:6px; height:6px; border-radius:50%; background:var(--rose); box-shadow:0 0 0 2px var(--surface); }
+
+.page{ padding:30px 30px 64px; max-width:1320px; }
+.grid{ display:grid; gap:18px; }
+.g4{ grid-template-columns:repeat(4,1fr); }
+.g3{ grid-template-columns:repeat(3,1fr); }
+.g2{ grid-template-columns:2fr 1fr; }
+.g2e{ grid-template-columns:1fr 1fr; }
+@media(max-width:1100px){ .g4{grid-template-columns:repeat(2,1fr);} .g3{grid-template-columns:1fr 1fr;} .g2{grid-template-columns:1fr;} }
+
+/* stagger-in for grid children */
+.grid > *{ animation:cardIn .5s var(--ease) both; }
+.grid > *:nth-child(1){animation-delay:.02s}
+.grid > *:nth-child(2){animation-delay:.07s}
+.grid > *:nth-child(3){animation-delay:.12s}
+.grid > *:nth-child(4){animation-delay:.17s}
+.grid > *:nth-child(5){animation-delay:.22s}
+.grid > *:nth-child(6){animation-delay:.27s}
+.grid > *:nth-child(7){animation-delay:.32s}
+@keyframes cardIn{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
+
+/* stat cards */
+.stat-card{ padding:21px 21px 19px; }
+.stat-card .top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+.stat-card .lbl{ font-size:13px; color:var(--text-dim); font-weight:500; }
+.stat-card .ic{ width:32px; height:32px; border-radius:10px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; color:var(--accent-strong); }
+.stat-card .val{ font-family:var(--font-mono); font-size:28px; font-weight:600; margin-bottom:9px; letter-spacing:-.01em; }
+.trend{ font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:3px; }
+.trend.up{ color:var(--mint); }
+.trend.down{ color:var(--rose); }
+
+.card-pad{ padding:24px; }
+.card-title{ display:flex; align-items:center; justify-content:space-between; margin-bottom:19px; gap:10px; }
+.card-title h3{ font-size:15px; font-family:var(--font-body); font-weight:600; }
+
+/* AI insight banner — soft breathing accent */
+.ai-banner{ position:relative; padding:23px 25px; display:flex; gap:17px; align-items:flex-start; overflow:hidden; border:1px solid #4B7F6330; background:linear-gradient(120deg, #4B7F6312, #8C6FAE08); }
+.ai-banner .txt{ flex:1; }
+.ai-banner .k{ font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-strong); margin-bottom:7px; }
+.ai-banner p{ font-size:15px; line-height:1.6; margin-bottom:15px; max-width:620px; }
+.ai-banner .actions{ display:flex; gap:10px; }
+
+/* activity feed */
+.feed-item{ display:flex; gap:12px; padding:13px 0; border-bottom:1px solid var(--border-soft); }
+.feed-item:last-child{ border:none; padding-bottom:0; }
+.feed-ic{ width:30px; height:30px; border-radius:9px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--accent-strong); }
+.feed-item .t{ font-size:13.5px; line-height:1.55; }
+.feed-item .ts{ font-size:11.5px; color:var(--text-faint); margin-top:3px; }
+
+/* table */
+table{ width:100%; border-collapse:collapse; }
+th{ text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint); font-weight:600; padding:0 14px 11px; border-bottom:1px solid var(--border-soft); }
+td{ padding:15px 14px; font-size:13.5px; border-bottom:1px solid var(--border-soft); }
+tr:last-child td{ border-bottom:none; }
+tbody tr{ transition:background .15s var(--ease); }
+tbody tr:hover{ background:var(--surface-2); }
+.name-cell{ display:flex; align-items:center; gap:10px; }
+.name-cell .av{ width:30px; height:30px; border-radius:50%; background:var(--surface-3); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; font-family:var(--font-display); color:var(--text-dim); flex-shrink:0; }
+
+/* chart mocks */
+.line-chart{ width:100%; height:220px; }
+.line-chart path.area{ animation:fadeArea .9s var(--ease) both .1s; }
+.line-chart path.stroke{ animation:fadeArea .9s var(--ease) both .1s; }
+@keyframes fadeArea{ from{opacity:0;} to{opacity:1;} }
+.bars{ display:flex; align-items:flex-end; gap:12px; height:180px; padding-top:10px; }
+.bars .bar-wrap{ flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; justify-content:flex-end; }
+.bars .bar{ width:100%; border-radius:7px 7px 3px 3px; background:var(--surface-3); position:relative; transform-origin:bottom; animation:growBar .6s var(--ease) both; }
+.bars .bar-wrap:nth-child(1) .bar{ animation-delay:.02s }
+.bars .bar-wrap:nth-child(2) .bar{ animation-delay:.07s }
+.bars .bar-wrap:nth-child(3) .bar{ animation-delay:.12s }
+.bars .bar-wrap:nth-child(4) .bar{ animation-delay:.17s }
+.bars .bar-wrap:nth-child(5) .bar{ animation-delay:.22s }
+.bars .bar-wrap:nth-child(6) .bar{ animation-delay:.27s }
+.bars .bar-wrap:nth-child(7) .bar{ animation-delay:.32s }
+@keyframes growBar{ from{ transform:scaleY(0); opacity:0; } to{ transform:scaleY(1); opacity:1; } }
+.bars .bar.hi{ background:var(--grad-1); }
+.bars .lbl{ font-size:11px; color:var(--text-faint); }
+.donut{ width:150px; height:150px; border-radius:50%; margin:0 auto; animation:spinIn .8s var(--ease) both; }
+@keyframes spinIn{ from{ opacity:0; transform:rotate(-30deg) scale(.9); } to{ opacity:1; transform:rotate(0) scale(1); } }
+.legend{ display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+.legend .row{ display:flex; align-items:center; gap:9px; font-size:13px; }
+.legend .sw{ width:9px; height:9px; border-radius:3px; }
+
+/* page header */
+.page-head{ display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:26px; flex-wrap:wrap; gap:14px; }
+.page-head h1{ font-size:24px; margin-bottom:6px; }
+.page-head .d{ color:var(--text-dim); font-size:14px; }
+
+/* AI assistant chat */
+.assist-wrap{ display:grid; grid-template-columns:260px 1fr 260px; gap:0; height:calc(100vh - 70px - 60px); border:1px solid var(--border-soft); border-radius:var(--radius-m); overflow:hidden; background:var(--surface); box-shadow:var(--shadow-card); }
+.assist-col{ border-right:1px solid var(--border-soft); padding:16px; overflow-y:auto; }
+.conv-item{ padding:11px 12px; border-radius:11px; margin-bottom:4px; font-size:13px; color:var(--text-dim); cursor:pointer; transition:background .15s; }
+.conv-item:hover{ background:var(--surface-2); }
+.conv-item.active{ background:var(--accent-soft); color:var(--accent-strong); }
+.conv-item .t{ font-weight:500; margin-bottom:3px; color:var(--text); }
+.chat-col{ display:flex; flex-direction:column; }
+.chat-msgs{ flex:1; overflow-y:auto; padding:26px; display:flex; flex-direction:column; gap:20px; scroll-behavior:smooth; }
+.msg{ display:flex; gap:12px; max-width:640px; animation:cardIn .35s var(--ease) both; }
+.msg.me{ align-self:flex-end; flex-direction:row-reverse; }
+.msg .bubble{ background:var(--surface-2); border:1px solid var(--border-soft); padding:13px 17px; border-radius:16px; font-size:14px; line-height:1.6; }
+.msg.me .bubble{ background:var(--accent); color:#fff; border-color:transparent; }
+.msg-avatar{ width:30px; height:30px; border-radius:50%; flex-shrink:0; }
+.msg.me .msg-avatar{ background:var(--surface-3); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; }
+.typing-bubble{ display:flex; align-items:center; gap:5px; padding:15px 17px !important; }
+.typing-bubble span{ width:6px; height:6px; border-radius:50%; background:var(--text-faint); animation:bounceDot 1.1s infinite; }
+.typing-bubble span:nth-child(2){ animation-delay:.15s; }
+.typing-bubble span:nth-child(3){ animation-delay:.3s; }
+@keyframes bounceDot{ 0%,60%,100%{ transform:translateY(0); opacity:.5; } 30%{ transform:translateY(-5px); opacity:1; } }
+.suggest-card{ border:1px solid var(--border); background:var(--surface); border-radius:14px; padding:17px; margin-top:6px; }
+.suggest-card .h{ font-weight:600; font-size:13.5px; margin-bottom:4px; }
+.suggest-card p{ font-size:13px; color:var(--text-dim); margin-bottom:13px; line-height:1.55; }
+.chat-input{ display:flex; gap:10px; padding:17px 22px; border-top:1px solid var(--border-soft); }
+.chat-input input{ flex:1; background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:12px 16px; color:var(--text); outline:none; font-size:14px; transition:border-color .15s, box-shadow .15s; }
+.chat-input input:focus{ border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-soft); }
+.signal-row{ display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border-soft); font-size:12.5px; }
+.signal-row:last-child{ border:none; }
+
+/* campaign generator */
+.gen-panel{ padding:23px; }
+.goal-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.slider{ width:100%; accent-color:#4B7F63; }
+.gen-result{ padding:25px; border:1px solid #4B7F6330; background:linear-gradient(160deg, #4B7F6314, transparent); }
+.gen-result h3{ font-size:18px; margin-bottom:9px; }
+.gen-result p{ color:var(--text-dim); font-size:14px; line-height:1.6; margin-bottom:17px; }
+.channel-row{ display:flex; gap:10px; margin-bottom:19px; flex-wrap:wrap; }
+.channel-pill{ display:flex; align-items:center; gap:6px; font-size:12.5px; background:var(--surface); border:1px solid var(--border); padding:7px 12px; border-radius:100px; }
+.metric-row{ display:flex; gap:26px; margin-bottom:21px; flex-wrap:wrap; }
+.metric-row .m .v{ font-family:var(--font-mono); font-size:20px; font-weight:600; }
+.metric-row .m .l{ font-size:11.5px; color:var(--text-faint); }
+
+/* settings */
+.tabs-h{ display:flex; gap:4px; border-bottom:1px solid var(--border-soft); margin-bottom:28px; }
+.tab-h{ padding:11px 18px; font-size:13.5px; font-weight:500; color:var(--text-dim); border-bottom:2px solid transparent; margin-bottom:-1px; transition:color .15s; }
+.tab-h.active{ color:var(--text); border-color:var(--accent); }
+.toggle-row{ display:flex; justify-content:space-between; align-items:center; padding:16px 0; border-bottom:1px solid var(--border-soft); }
+.toggle-row:last-child{ border:none; }
+.toggle-row .t{ font-size:14px; font-weight:500; }
+.toggle-row .s{ font-size:12.5px; color:var(--text-faint); margin-top:2px; }
+.switch{ width:40px; height:22px; border-radius:100px; background:var(--surface-3); position:relative; cursor:pointer; flex-shrink:0; transition:background .18s var(--ease); }
+.switch.on{ background:var(--accent); }
+.switch .knob{ position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%; background:#fff; transition:transform .18s var(--ease); box-shadow:0 1px 3px rgba(0,0,0,.2); }
+.switch.on .knob{ transform:translateX(18px); }
+
+/* forms generic */
+.form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:17px; }
+.form-grid .full{ grid-column:1/-1; }
+.form-grid label{ display:block; font-size:13px; color:var(--text-dim); margin-bottom:7px; font-weight:500; }
+.form-grid input, .form-grid select, .form-grid textarea{ width:100%; background:var(--surface-2); border:1px solid var(--border); border-radius:11px; padding:10px 13px; color:var(--text); font-size:13.5px; outline:none; transition:border-color .15s, box-shadow .15s; }
+.form-grid input:focus, .form-grid textarea:focus{ border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-soft); }
+.form-grid input:disabled{ opacity:.65; }
+
+/* admin */
+.admin-badge{ display:inline-flex; align-items:center; gap:6px; background:var(--rose-soft); color:var(--rose); font-size:11px; font-weight:700; padding:4px 10px; border-radius:100px; text-transform:uppercase; letter-spacing:.05em; }
+.health-row{ display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border-soft); font-size:13px; }
+.health-row:last-child{ border:none; }
+.health-dot{ width:8px; height:8px; border-radius:50%; background:var(--mint); box-shadow:0 0 8px var(--mint); }
+
+/* customers score */
+.score{ font-family:var(--font-mono); font-weight:600; }
+
+/* mobile sidebar toggle */
+.menu-btn{ display:none; }
+@media(max-width:960px){
+  .sidebar{ transform:translateX(-100%); }
+  .sidebar.open{ transform:translateX(0); }
+  .main-area{ margin-left:0; }
+  .menu-btn{ display:flex; }
+  .assist-wrap{ grid-template-columns:1fr; }
+  .assist-col{ display:none; }
+  .login-wrap{ grid-template-columns:1fr; }
+  .login-brand{ display:none; }
+}
+.fade-in{ animation:fadeIn .4s var(--ease); }
+@keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================================================
+   ICONS — minimal 20x20 stroke set
+============================================================ */
+const ICON = {
+  grid: '<path d="M3 3h6v6H3zM11 3h6v6h-6zM3 11h6v6H3zM11 11h6v6h-6z"/>',
+  spark: '<path d="M10 2l1.8 5.2L17 9l-5.2 1.8L10 16l-1.8-5.2L3 9l5.2-1.8z"/>',
+  megaphone: '<path d="M3 9v2a1 1 0 001 1h1l2 5h2l-1.5-5H10l6 3V6l-6 3H4a1 1 0 00-1 1z"/>',
+  users: '<path d="M7 9a3 3 0 100-6 3 3 0 000 6zM1 17c0-3 2.7-5 6-5s6 2 6 5M14 4.2a3 3 0 010 5.6M17 17c0-2.5-1.8-4.3-4-4.9"/>',
+  chart: '<path d="M3 17V9M9 17V3M15 17v-6"/>',
+  gear: '<path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/><path d="M16.5 10a6.4 6.4 0 00-.1-1.1l1.7-1.3-1.5-2.6-2 .8a6.4 6.4 0 00-1.9-1.1L12.4 2H7.6l-.3 2.7a6.4 6.4 0 00-1.9 1.1l-2-.8-1.5 2.6 1.7 1.3a6.7 6.7 0 000 2.2l-1.7 1.3 1.5 2.6 2-.8c.6.5 1.2.8 1.9 1.1l.3 2.7h4.8l.3-2.7a6.4 6.4 0 001.9-1.1l2 .8 1.5-2.6-1.7-1.3c.1-.4.1-.7.1-1.1z"/>',
+  shield: '<path d="M10 2l7 3v5c0 4.5-3 7.5-7 8-4-.5-7-3.5-7-8V5l7-3z"/>',
+  bell: '<path d="M5 8a5 5 0 0110 0c0 4 1.5 5 1.5 5h-13S5 12 5 8z"/><path d="M8.5 16a1.5 1.5 0 003 0"/>',
+  search: '<circle cx="8.5" cy="8.5" r="5.5"/><path d="M17 17l-4-4"/>',
+  logout: '<path d="M8 3H4a1 1 0 00-1 1v12a1 1 0 001 1h4M13 14l4-4-4-4M17 10H7"/>',
+  chevronDown: '<path d="M5 7.5l5 5 5-5"/>',
+  plus: '<path d="M10 4v12M4 10h12"/>',
+  arrowRight: '<path d="M4 10h12M11 5l5 5-5 5"/>',
+  check: '<path d="M4 10l4 4 8-8"/>',
+  upRight: '<path d="M6 14L14 6M8 6h6v6"/>',
+  downRight: '<path d="M6 6l8 8M14 6v8H8"/>',
+  clock: '<circle cx="10" cy="10" r="7.5"/><path d="M10 6v4l3 2"/>',
+  filter: '<path d="M3 4h14M6 10h8M8.5 16h3"/>',
+  mail: '<path d="M3 5h14v10H3z"/><path d="M3 5l7 6 7-6"/>',
+  sms: '<path d="M3 4h14v9H8l-3 3v-3H3z"/>',
+  insta: '<rect x="3" y="3" width="14" height="14" rx="4"/><circle cx="10" cy="10" r="3.3"/><circle cx="14.2" cy="5.8" r=".9"/>',
+  building: '<path d="M4 17V4a1 1 0 011-1h6a1 1 0 011 1v13M12 17V8h4v9M8 6h.01M8 9h.01M8 12h.01M4 17h13"/>',
+  bolt: '<path d="M11 2L4 12h5l-1 6 7-10h-5z"/>',
+  credit: '<rect x="2.5" y="4.5" width="15" height="11" rx="2"/><path d="M2.5 8h15"/>',
+  server: '<rect x="3" y="3" width="14" height="5.5" rx="1.2"/><rect x="3" y="11.5" width="14" height="5.5" rx="1.2"/><path d="M6 5.7h.01M6 14.2h.01"/>',
+  eye: '<path d="M1 10s3-6 9-6 9 6 9 6-3 6-9 6-9-6-9-6z"/><circle cx="10" cy="10" r="2.5"/>',
+  refresh: '<path d="M16 4v4h-4"/><path d="M4 16v-4h4"/><path d="M5.5 9a5.5 5.5 0 019-3.5L16 7M14.5 11a5.5 5.5 0 01-9 3.5L4 13"/>',
+  trash: '<path d="M4 6h12"/><path d="M8 6V4.5A1.5 1.5 0 019.5 3h1A1.5 1.5 0 0112 4.5V6"/><path d="M6 6l.7 10.5A1.5 1.5 0 008.2 18h3.6a1.5 1.5 0 001.5-1.5L14 6"/>',
+  edit: '<path d="M13.5 3.5a2.1 2.1 0 013 3L7 16l-4 1 1-4z"/>',
+  qrcode: '<rect x="3" y="3" width="5" height="5"/><rect x="12" y="3" width="5" height="5"/><rect x="3" y="12" width="5" height="5"/><path d="M12 12h2v2h-2zM16 12h1v1h-1zM12 16h1v1h-1zM15 15h2v2h-2z"/>',
+};
+const ic = (name, cls='') => `<svg class="${cls}" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICON[name]||''}</svg>`;
+
+/* ============================================================
+   BACKEND API BASE — override with ?api=https://your-backend or window.UPWISE_API_BASE
+============================================================ */
+const API_BASE = new URLSearchParams(location.search).get('api') || window.UPWISE_API_BASE || 'http://localhost:8000';
+
+function getToken(){ return localStorage.getItem('upwise_token'); }
+function setToken(t){ if(t) localStorage.setItem('upwise_token', t); else localStorage.removeItem('upwise_token'); }
+
+async function apiFetch(path, opts={}){
+  const { method='GET', body, skipAuth=false } = opts;
+  const headers = {'Content-Type':'application/json'};
+  const token = getToken();
+  if(!skipAuth && token) headers['Authorization'] = 'Bearer ' + token;
+  let res;
+  try{
+    res = await fetch(API_BASE + path, { method, headers, body: body!==undefined ? JSON.stringify(body) : undefined });
+  }catch(e){
+    throw new Error('Не удалось подключиться к серверу (' + API_BASE + '). Убедитесь, что backend запущен.');
+  }
+  if(res.status === 401){
+    setToken(null); state.user = null;
+    throw new Error('Сессия истекла, войдите снова');
+  }
+  if(!res.ok){
+    let detail = 'Ошибка запроса (' + res.status + ')';
+    try{ const j = await res.json(); if(j && j.detail) detail = j.detail; }catch(e){}
+    throw new Error(detail);
+  }
+  if(res.status === 204) return null;
+  const ct = res.headers.get('content-type') || '';
+  if(ct.includes('application/json')) return res.json();
+  return res;
+}
+async function apiFetchBlob(path){
+  const token = getToken();
+  const res = await fetch(API_BASE + path, { headers: token ? {'Authorization':'Bearer '+token} : {} });
+  if(!res.ok) throw new Error('Не удалось загрузить изображение');
+  return res.blob();
+}
+
+async function doLogin(email, password){
+  const data = await apiFetch('/auth/login', {method:'POST', body:{email,password}, skipAuth:true});
+  setToken(data.access_token);
+  state.user = data.user;
+}
+async function doRegister(payload){
+  const data = await apiFetch('/auth/register', {method:'POST', body:payload, skipAuth:true});
+  setToken(data.access_token);
+  state.user = data.user;
+}
+async function refreshMe(){
+  state.user = await apiFetch('/auth/me');
+}
+function doLogout(){
+  setToken(null);
+  state.user = null;
+  state.page = 'dashboard';
+  state.generatedCampaign = null;
+  Object.keys(DATA).forEach(k=>DATA[k]=null);
+  go('landing');
+}
+
+/* ============================================================
+   REFERENCE DATA — mirrors backend seed (app/seed_data.py) so
+   dropdowns render instantly without an extra round-trip
+============================================================ */
+const BUSINESS_TYPE_OPTIONS = [
+  {key:'coffee_shop', label:'Кофейня'},
+  {key:'clothing_store', label:'Магазин одежды'},
+  {key:'beauty_salon', label:'Салон красоты'},
+  {key:'service_point', label:'Сервисная точка'},
+  {key:'other', label:'Другое'},
+];
+const SIZE_OPTIONS = [
+  {key:'small', label:'Маленький (до 5 сотрудников)'},
+  {key:'medium', label:'Средний (5–30 сотрудников)'},
+];
+const GOAL_OPTIONS = [
+  {key:'new_customers', label:'Привлечь новых клиентов'},
+  {key:'retention', label:'Удержать текущих клиентов'},
+  {key:'revenue', label:'Увеличить средний чек'},
+];
+function labelFor(list, key){ const f = list.find(x=>x.key===key); return f ? f.label : key; }
+
+const SEGMENT_META = {
+  vip: {label:'VIP', badge:'badge-mint', color:'#4B7F63'},
+  regular: {label:'Постоянный', badge:'badge-neutral', color:'#6FA087'},
+  new: {label:'Новый', badge:'badge-violet', color:'#8C6FAE'},
+  at_risk: {label:'Под риском', badge:'badge-amber', color:'#C08A3D'},
+  lost: {label:'Ушёл', badge:'badge-rose', color:'#BD5B52'},
+};
+function segBadgeHTML(seg){ const m = SEGMENT_META[seg] || {label:seg, badge:'badge-neutral'}; return `<span class="badge ${m.badge}">${m.label}</span>`; }
+function scoreColor(s){ return s>=70?'var(--mint)':s>=40?'var(--amber)':'var(--rose)'; }
+
+const CHANNEL_META = {
+  sms: {label:'SMS', icon:'sms'},
+  email: {label:'Email', icon:'mail'},
+  social: {label:'Соцсети', icon:'insta'},
+  qr: {label:'QR-код', icon:'qrcode'},
+};
+const CAMPAIGN_STATUS_META = {
+  draft: {label:'Черновик', badge:'badge-neutral'},
+  active: {label:'Активна', badge:'badge-mint'},
+  paused: {label:'На паузе', badge:'badge-amber'},
+  completed: {label:'Завершена', badge:'badge-violet'},
+};
+function statusBadgeHTML(status){ const m = CAMPAIGN_STATUS_META[status] || {label:status, badge:'badge-neutral'}; return `<span class="badge ${m.badge}">${m.label}</span>`; }
+function formatROI(roi){ const pct = Math.round(((roi||1)-1)*100); return (pct>=0?'+':'') + pct + '%'; }
+function formatKZT(n){ return Math.round(n||0).toLocaleString('ru-RU') + ' ₸'; }
+function formatRelativeDate(dateStr){
+  if(!dateStr) return '—';
+  const d = new Date(dateStr+'T00:00:00');
+  const now = new Date();
+  const diffDays = Math.round((new Date(now.toDateString()) - new Date(d.toDateString())) / 86400000);
+  if(diffDays<=0) return 'Сегодня';
+  if(diffDays===1) return 'Вчера';
+  if(diffDays<7) return `${diffDays} дн. назад`;
+  if(diffDays<30) return `${Math.floor(diffDays/7)} нед. назад`;
+  return `${Math.floor(diffDays/30)} мес. назад`;
+}
+function formatDateTime(iso){
+  try{ return new Date(iso).toLocaleString('ru-RU', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}); }
+  catch(e){ return iso; }
+}
+function activityIcon(type){ return type==='campaign_created'?'megaphone':type==='recommendation_applied'?'spark':type==='tool_activated'?'bolt':'spark'; }
+
+const NAV_MAIN = [
+  {id:'dashboard', label:'Дашборд', icon:'grid'},
+  {id:'assistant', label:'AI-ассистент', icon:'spark'},
+  {id:'campaigns', label:'Акции', icon:'megaphone'},
+  {id:'customers', label:'Клиенты', icon:'users'},
+  {id:'analytics', label:'Аналитика', icon:'chart'},
+];
+const NAV_SYS = [
+  {id:'settings', label:'Настройки', icon:'gear'},
+  {id:'admin', label:'Админ-панель', icon:'shield'},
+];
+const PAGE_META = {
+  dashboard:{ title:'Дашборд', sub:()=> (state.user?state.user.business_name:'') + ' · сегодня, ' + new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long'}) },
+  assistant:{ title:'AI-ассистент', sub:'Анализирует бизнес и предлагает действия' },
+  campaigns:{ title:'Акции', sub:'Создавайте кампании вместе с AI' },
+  customers:{ title:'Клиенты', sub:'CRM и AI-оценка клиентской базы' },
+  analytics:{ title:'Аналитика', sub:'Графики, метрики и выводы AI' },
+  settings:{ title:'Настройки', sub:'Бизнес и аккаунт' },
+  admin:{ title:'Админ-панель', sub:'Управление платформой UpWise' },
+};
+function visibleNavItems(){
+  return [...NAV_MAIN, ...NAV_SYS.filter(n => n.id!=='admin' || (state.user && state.user.is_admin))];
+}
+
+/* ============================================================
+   STATE + DATA CACHE
+============================================================ */
+const state = {
+  view:'landing', page:'dashboard', authTab:'login', sidebarOpen:false, settingsTab:'business',
+  user:null,
+  campaignForm:{ campaign_type:'discount', channel:'sms', segment:'all', discount_value:15 },
+  generatedCampaign:null,
+  addCustomerOpen:false,
+};
+const DATA = {
+  dashboard:null, analytics:null, customers:null, customerSegments:null,
+  campaigns:null, recommendations:null, tools:null,
+  adminStats:null, adminUsers:null, adminTools:null, adminCategories:null,
+};
+
+async function ensurePageData(page){
+  try{
+    if(page==='dashboard'){
+      const [dash, customers, analytics] = await Promise.all([
+        apiFetch('/dashboard'), apiFetch('/customers'), apiFetch('/analytics/overview')
+      ]);
+      DATA.dashboard = dash; DATA.customers = customers; DATA.analytics = analytics;
+    } else if(page==='assistant'){
+      DATA.recommendations = await apiFetch('/recommendations');
+    } else if(page==='campaigns'){
+      const [campaigns, tools] = await Promise.all([apiFetch('/campaigns'), apiFetch('/tools')]);
+      DATA.campaigns = campaigns; DATA.tools = tools;
+    } else if(page==='customers'){
+      const [customers, segments] = await Promise.all([apiFetch('/customers'), apiFetch('/customers/segments/summary')]);
+      DATA.customers = customers; DATA.customerSegments = segments;
+    } else if(page==='analytics'){
+      const [analytics, segments] = await Promise.all([apiFetch('/analytics/overview'), apiFetch('/customers/segments/summary')]);
+      DATA.analytics = analytics; DATA.customerSegments = segments;
+    } else if(page==='admin'){
+      const [stats, users, tools, categories] = await Promise.all([
+        apiFetch('/admin/stats'), apiFetch('/admin/users'), apiFetch('/admin/tools'), apiFetch('/admin/categories')
+      ]);
+      DATA.adminStats = stats; DATA.adminUsers = users; DATA.adminTools = tools; DATA.adminCategories = categories;
+    }
+  }catch(e){
+    showToast(e.message || 'Не удалось загрузить данные', 'error');
+  }
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+async function go(view){
+  if(view==='dashboard'){ await ensurePageData('dashboard'); }
+  crossfadeApp(()=>{
+    state.view = view; state.sidebarOpen=false; window.scrollTo(0,0);
+    if(view==='dashboard') state.page = 'dashboard';
+  });
+  if(view==='dashboard' && state.user) setTimeout(()=>showToast(`Добро пожаловать, ${state.user.business_name}!`), 260);
+}
+async function goPage(p){
+  if(p===state.page) return;
+  await ensurePageData(p);
+  state.page = p; state.sidebarOpen=false;
+  transitionPage();
+}
+function rerenderPage(){
+  const pageEl = document.querySelector('.page');
+  if(pageEl){ pageEl.innerHTML = PAGES[state.page](); animateCountUps(); }
+  else render();
+}
+
+/* Smooth full-app crossfade — used for landing/login/dashboard switches */
+function crossfadeApp(mutator){
+  const root = document.getElementById('app');
+  root.style.transition = 'opacity .22s var(--ease), transform .22s var(--ease)';
+  root.style.opacity = '0';
+  root.style.transform = 'translateY(8px)';
+  setTimeout(()=>{
+    mutator();
+    render();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      root.style.opacity = '1';
+      root.style.transform = 'translateY(0)';
+    }));
+  }, 200);
+}
+
+/* Smooth in-shell page crossfade — sidebar/topbar stay put, only content fades */
+function transitionPage(){
+  const meta = PAGE_META[state.page];
+  const sidebarEl = document.querySelector('.sidebar');
+  const pageEl = document.querySelector('.page');
+  const titleEl = document.querySelector('.topbar h1');
+  const subEl = document.querySelector('.topbar-sub');
+  if(!pageEl){ render(); return; }
+
+  if(sidebarEl){
+    sidebarEl.querySelectorAll('.nav-item').forEach(a=>a.classList.remove('active'));
+    const all = visibleNavItems();
+    const idx = all.findIndex(n=>n.id===state.page);
+    const navEls = sidebarEl.querySelectorAll('.nav-item');
+    if(navEls[idx]) navEls[idx].classList.add('active');
+  }
+
+  pageEl.style.transition = 'opacity .18s var(--ease), transform .18s var(--ease)';
+  pageEl.style.opacity = '0';
+  pageEl.style.transform = 'translateY(8px)';
+  setTimeout(()=>{
+    if(titleEl) titleEl.textContent = meta.title;
+    if(subEl) subEl.textContent = typeof meta.sub==='function' ? meta.sub() : meta.sub;
+    pageEl.innerHTML = PAGES[state.page]();
+    animateCountUps();
+    pageEl.scrollIntoView({behavior:'instant'});
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      pageEl.style.opacity = '1';
+      pageEl.style.transform = 'translateY(0)';
+    }));
+  }, 170);
+}
+
+/* Smooth settings-tab / mobile-sidebar helpers */
+function switchSettingsTab(id){
+  state.settingsTab = id;
+  const pageEl = document.querySelector('.page');
+  if(!pageEl){ render(); return; }
+  pageEl.style.transition = 'opacity .16s var(--ease)';
+  pageEl.style.opacity = '0';
+  setTimeout(()=>{
+    pageEl.innerHTML = PAGES[state.page]();
+    requestAnimationFrame(()=>{ pageEl.style.opacity = '1'; });
+  }, 140);
+}
+function switchAuthTab(id){
+  state.authTab = id;
+  crossfadeApp(()=>{});
+}
+function toggleSidebar(){
+  state.sidebarOpen = !state.sidebarOpen;
+  document.querySelector('.sidebar')?.classList.toggle('open', state.sidebarOpen);
+}
+
+/* ============================================================
+   TOASTS
+============================================================ */
+function showToast(msg, kind='ok'){
+  let host = document.getElementById('toastHost');
+  if(!host){ host=document.createElement('div'); host.id='toastHost'; host.className='toast-host'; document.body.appendChild(host); }
+  const t=document.createElement('div');
+  t.className = 'toast' + (kind==='error' ? ' error' : '');
+  t.innerHTML = `<span class="toast-ic">${ic(kind==='error'?'downRight':'check')}</span><span>${escapeHTML(msg)}</span>`;
+  host.appendChild(t);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),320); },3400);
+}
+
+/* ============================================================
+   ANIMATED COUNTERS
+============================================================ */
+function animateCountUps(){
+  document.querySelectorAll('.val[data-final]').forEach(el=>{
+    const final = el.getAttribute('data-final');
+    const match = final.match(/^([^\d]*)([\d\s]*\d)([^\d]*)$/);
+    if(!match){ el.textContent = final; return; }
+    const prefix = match[1], numPart = match[2], suffix = match[3];
+    const target = parseInt(numPart.replace(/\s/g,''),10);
+    if(isNaN(target)){ el.textContent = final; return; }
+    let startTs=null; const dur=850;
+    el.textContent = prefix + '0' + suffix;
+    function step(ts){
+      if(!startTs) startTs=ts;
+      const p = Math.min((ts-startTs)/dur,1);
+      const eased = 1-Math.pow(1-p,3);
+      const val = Math.round(target*eased);
+      el.textContent = prefix + val.toLocaleString('ru-RU') + suffix;
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+/* ============================================================
+   SHARED PIECES
+============================================================ */
+function auroraBg(){
+  return `<div class="aurora"><div class="a1"></div><div class="a2"></div><div class="a3"></div></div>`;
+}
+function pulseOrbHTML(size=''){
+  return `<div class="pulse-orb ${size}"><div class="core"></div></div>`;
+}
+function statCardHTML(lbl,val,dir,delta,icon){
+  const trend = dir ? `<span class="trend ${dir}">${ic(dir==='up'?'upRight':'downRight')} ${delta}</span>` : '';
+  return `<div class="card stat-card hoverable">
+    <div class="top"><span class="lbl">${lbl}</span><span class="ic">${ic(icon)}</span></div>
+    <div class="val" data-final="${val}"></div>
+    ${trend}
+  </div>`;
+}
+function featCardHTML(icon,title,desc){
+  return `<div class="card feat-card hoverable"><div class="feat-icon">${ic(icon)}</div><h3>${title}</h3><p>${desc}</p></div>`;
+}
+function aiBannerHTML(withOpen=true){
+  return `<div class="card ai-banner">
+    ${pulseOrbHTML()}
+    <div class="txt">
+      <div class="k">AI рекомендует</div>
+      <p>По вторникам трафик падает на 18%. Запустите акцию «Счастливые часы» с 15:00 до 18:00, чтобы вернуть клиентов в спокойные часы.</p>
+      <div class="actions">
+        <button class="btn btn-primary btn-sm" onclick="${withOpen?"goPage('campaigns')":"showToast('Открываю предложение…')"}">Рассмотреть предложение</button>
+        <button class="btn btn-ghost btn-sm" onclick="showToast('Хорошо, напомню позже')">Не сейчас</button>
+      </div>
+    </div>
+  </div>`;
+}
+function recommendationBannerHTML(rec){
+  return `<div class="card ai-banner">
+    ${pulseOrbHTML()}
+    <div class="txt">
+      <div class="k">AI рекомендует</div>
+      <p><strong>${escapeHTML(rec.title)}</strong> — ${escapeHTML(rec.reason || rec.description || '')}</p>
+      <div class="actions">
+        <button class="btn btn-primary btn-sm" onclick="applyRecommendation(${rec.id})">Применить</button>
+        <button class="btn btn-ghost btn-sm" onclick="dismissRecommendation(${rec.id})">Не сейчас</button>
+      </div>
+    </div>
+  </div>`;
+}
+function escapeHTML(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function initials(n){ return String(n||'').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+
+/* ---------------- LANDING (marketing preview — illustrative, no login required) ---------------- */
+function renderLanding(){
+  return `
+  <div class="landing">
+    ${auroraBg()}
+    <nav class="l-nav">
+      <div class="l-logo">${pulseOrbHTML('sm')} UpWise</div>
+      <div class="l-nav-links">
+        <a href="#">Продукт</a>
+        <a href="#feat">Возможности</a>
+        <a href="#how">Как это работает</a>
+        <a href="#">Тарифы</a>
+      </div>
+      <div class="l-nav-actions">
+        <button class="btn btn-ghost" onclick="go('login')">Войти</button>
+        <button class="btn btn-primary" onclick="go('login')">Начать бесплатно</button>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="eyebrow">AI-МАРКЕТИНГ ДЛЯ МАЛОГО БИЗНЕСА</div>
+      <h1 style="margin-top:16px">Ваш бизнес,<br><span class="grad">который работает без вас</span></h1>
+      <p>Пока вы занимаетесь бизнесом — UpWise привлекает клиентов.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="go('login')">Начать бесплатно ${ic('arrowRight')}</button>
+        <button class="btn btn-outline" onclick="go('login')">Смотреть демо</button>
+      </div>
+      <div class="hero-note">Бесплатно 14 дней · Карта не нужна</div>
+    </section>
+
+    <div class="hero-preview">
+      <div class="preview-frame">
+        <div class="preview-topbar"><span></span><span></span><span></span></div>
+        <div style="padding:24px 28px 34px">
+          <div class="grid g4" style="margin-bottom:16px">
+            ${statCardHTML('Выручка за неделю','1 284 600 ₸','up','+18.4%','chart')}
+            ${statCardHTML('Активные акции','6','up','+2','megaphone')}
+            ${statCardHTML('Новые клиенты','142','up','+9.2%','users')}
+            ${statCardHTML('Действий AI','38','up','+12','spark')}
+          </div>
+          ${aiBannerHTML(false)}
+        </div>
+      </div>
+    </div>
+
+    <section class="section" id="feat">
+      <div class="section-head">
+        <div class="eyebrow">ВОЗМОЖНОСТИ</div>
+        <h2>Один AI, который заменяет отдел маркетинга</h2>
+        <p>UpWise объединяет аналитику, генерацию акций и работу с клиентами в одном месте — и принимает решения за вас, когда вы разрешаете.</p>
+      </div>
+      <div class="feat-grid">
+        ${featCardHTML('spark','AI-ассистент','Круглосуточно следит за метриками бизнеса и подсказывает, какие акции сработают именно сейчас.')}
+        ${featCardHTML('megaphone','Генератор акций','Опишите цель — AI соберёт текст, каналы и бюджет кампании за секунды.')}
+        ${featCardHTML('users','CRM с AI-оценкой','Каждый клиент получает оценку риска оттока и потенциальной ценности.')}
+        ${featCardHTML('chart','Аналитика','Понятные графики и текстовые выводы вместо сотен строк таблиц.')}
+      </div>
+    </section>
+
+    <section class="section" id="how" style="padding-top:0">
+      <div class="section-head">
+        <div class="eyebrow">ПРОЦЕСС</div>
+        <h2>Три шага до первой AI-акции</h2>
+      </div>
+      <div class="steps">
+        <div class="step card hoverable"><span class="num">01</span><h3>Подключите бизнес</h3><p>Свяжите кассу, соцсети и клиентскую базу — это займёт пять минут.</p></div>
+        <div class="step card hoverable"><span class="num">02</span><h3>AI анализирует данные</h3><p>UpWise находит закономерности в продажах и поведении клиентов.</p></div>
+        <div class="step card hoverable"><span class="num">03</span><h3>Акции запускаются сами</h3><p>Вы одобряете рекомендации — или разрешаете AI действовать автономно.</p></div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="card quote-card">
+        <p>«Я тратил много времени на рутину, но благодаря UpWise моя работа стала намного легче и эффективнее!»</p>
+        <div class="quote-who"><div class="quote-avatar"></div><div style="text-align:left"><div style="font-weight:600;font-size:14px">Рауан</div><div class="faint" style="font-size:12.5px">CEO of Restaurant</div></div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h2>Готовы, чтобы маркетинг работал сам?</h2>
+      <p style="position:relative">Присоединяйтесь бесплатно — без карты, без обязательств.</p>
+      <button class="btn btn-primary" style="position:relative" onclick="go('login')">Начать бесплатно ${ic('arrowRight')}</button>
+    </div>
+
+    <footer class="l-footer">
+      <div class="l-logo" style="font-size:15px">${pulseOrbHTML('sm')} UpWise</div>
+      <div>© 2026 UpWise. Все права защищены.</div>
+    </footer>
+  </div>`;
+}
+
+/* ---------------- LOGIN / REGISTER (wired to /auth/login, /auth/register) ---------------- */
+function renderLogin(){
+  const isLogin = state.authTab==='login';
+  return `
+  <div class="login-wrap">
+    <div class="login-brand">
+      ${auroraBg()}
+      <div class="l-logo" style="position:relative;z-index:2">${pulseOrbHTML('sm')} UpWise</div>
+      <div class="login-brand-content">
+        <p>«UpWise помогает малому бизнесу расти без отдела маркетинга.»</p>
+        <div style="margin-top:18px;font-size:13.5px;color:var(--text-dim)">Демо-доступ: demo@upwise.kz / demo1234</div>
+      </div>
+      <div class="login-brand-foot">© 2026 UpWise — AI-маркетинг для малого бизнеса</div>
+    </div>
+    <div class="login-form-side">
+      <div class="login-box">
+        <div class="login-tabs">
+          <div class="login-tab ${isLogin?'active':''}" onclick="switchAuthTab('login')">Вход</div>
+          <div class="login-tab ${!isLogin?'active':''}" onclick="switchAuthTab('signup')">Регистрация</div>
+        </div>
+        <h2 style="font-size:24px;margin-bottom:8px">${isLogin?'С возвращением':'Создайте аккаунт'}</h2>
+        <p class="dim" style="font-size:13.5px;margin-bottom:28px">${isLogin?'Войдите, чтобы продолжить работу с UpWise':'Расскажите о бизнесе — AI сразу подберёт рекомендации'}</p>
+        <form onsubmit="event.preventDefault(); ${isLogin?'handleLoginSubmit()':'handleSignupSubmit()'}">
+          ${!isLogin? `
+          <div class="field"><label>Название бизнеса</label><input id="suBizName" placeholder="Кофейня «Утро»" required/></div>
+          <div class="field"><label>Тип бизнеса</label><select id="suBizType">${BUSINESS_TYPE_OPTIONS.map(o=>`<option value="${o.key}">${o.label}</option>`).join('')}</select></div>
+          <div class="field"><label>Размер бизнеса</label><select id="suBizSize">${SIZE_OPTIONS.map(o=>`<option value="${o.key}">${o.label}</option>`).join('')}</select></div>
+          <div class="field"><label>Главная цель</label><select id="suBizGoal">${GOAL_OPTIONS.map(o=>`<option value="${o.key}">${o.label}</option>`).join('')}</select></div>
+          <div class="field"><label>Средний чек, ₸</label><input id="suAvgCheck" type="number" min="0" placeholder="1800"/></div>
+          `:''}
+          <div class="field"><label>Email</label><input id="authEmail" type="email" placeholder="alina@figember.kz" required/></div>
+          <div class="field"><label>Пароль</label><input id="authPassword" type="password" placeholder="••••••••" required minlength="6"/></div>
+          <div style="height:10px"></div>
+          <button class="btn btn-primary btn-block" type="submit" id="authSubmitBtn">${isLogin?'Войти':'Создать аккаунт'} ${ic('arrowRight')}</button>
+        </form>
+        ${isLogin? `<button class="btn btn-outline btn-block" style="margin-top:12px" onclick="quickDemoLogin()">Войти в демо-аккаунт (кофейня)</button>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+async function handleLoginSubmit(){
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const btn = document.getElementById('authSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Входим...';
+  try{
+    await doLogin(email, password);
+    await go('dashboard');
+  }catch(e){
+    showToast(e.message || 'Не удалось войти', 'error');
+    btn.disabled = false; btn.textContent = 'Войти';
+  }
+}
+async function handleSignupSubmit(){
+  const bizName = document.getElementById('suBizName').value.trim();
+  if(!bizName){ showToast('Укажите название бизнеса', 'error'); return; }
+  const payload = {
+    email: document.getElementById('authEmail').value.trim(),
+    password: document.getElementById('authPassword').value,
+    business_name: bizName,
+    business: {
+      business_type: document.getElementById('suBizType').value,
+      size: document.getElementById('suBizSize').value,
+      goal: document.getElementById('suBizGoal').value,
+      avg_check: Number(document.getElementById('suAvgCheck').value) || 0,
+    }
+  };
+  const btn = document.getElementById('authSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Создаём...';
+  try{
+    await doRegister(payload);
+    await go('dashboard');
+  }catch(e){
+    showToast(e.message || 'Не удалось зарегистрироваться', 'error');
+    btn.disabled = false; btn.textContent = 'Создать аккаунт';
+  }
+}
+function quickDemoLogin(){
+  const doFill = ()=>{
+    const e=document.getElementById('authEmail'), p=document.getElementById('authPassword');
+    if(e && p){ e.value='demo@upwise.kz'; p.value='demo1234'; handleLoginSubmit(); }
+  };
+  if(state.authTab==='login' && document.getElementById('authEmail')){ doFill(); }
+  else{ state.authTab='login'; crossfadeApp(()=>{}); setTimeout(doFill, 260); }
+}
+
+/* ---------------- APP SHELL ---------------- */
+function renderShell(){
+  const meta = PAGE_META[state.page];
+  const sub = typeof meta.sub==='function' ? meta.sub() : meta.sub;
+  const navSys = NAV_SYS.filter(n => n.id!=='admin' || (state.user && state.user.is_admin));
+  const initialsStr = state.user ? initials(state.user.business_name) : '··';
+  return `
+  <div class="app-shell">
+    <aside class="sidebar ${state.sidebarOpen?'open':''}">
+      <div class="sidebar-head">${pulseOrbHTML('sm')} <span class="name">UpWise</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-group-label">Рабочее пространство</div>
+        ${NAV_MAIN.map(n=>navItemHTML(n)).join('')}
+        <div class="nav-group-label">Управление</div>
+        ${navSys.map(n=>navItemHTML(n)).join('')}
+      </nav>
+      <div class="sidebar-foot">
+        <div class="mini-avatar">${initialsStr}</div>
+        <div class="who"><div class="n">${state.user?escapeHTML(state.user.business_name):''}</div><div class="r">${state.user?escapeHTML(state.user.email):''}</div></div>
+        <button title="Выйти" onclick="doLogout()">${ic('logout')}</button>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:14px">
+          <button class="icon-btn menu-btn" onclick="toggleSidebar()">${ic('grid')}</button>
+          <div><h1>${meta.title}</h1><div class="topbar-sub">${sub}</div></div>
+        </div>
+        <div class="topbar-actions">
+          <div class="search-box">${ic('search')}<input placeholder="Поиск..."/></div>
+          <button class="icon-btn" onclick="showToast('Новых уведомлений нет')">${ic('bell')}<span class="dot"></span></button>
+          <div class="mini-avatar" style="width:36px;height:36px">${initialsStr}</div>
+        </div>
+      </div>
+      <div class="page fade-in">${PAGES[state.page]()}</div>
+    </div>
+  </div>`;
+}
+function navItemHTML(n){
+  return `<a class="nav-item ${state.page===n.id?'active':''}" onclick="goPage('${n.id}')">${ic(n.icon)} ${n.label}</a>`;
+}
+
+/* ---------------- DASHBOARD ---------------- */
+function pageDashboard(){
+  const d = DATA.dashboard;
+  if(!d) return `<div class="dim">Загрузка данных...</div>`;
+  const topCustomers = (DATA.customers||[]).slice().sort((a,b)=>b.value_score-a.value_score).slice(0,4);
+  const topRec = d.top_recommendations && d.top_recommendations[0];
+  const trendVals = DATA.analytics ? DATA.analytics.revenue_trend.map(t=>t.revenue) : [];
+  return `
+  <div class="page-head">
+    <div><h1>Добрый день, ${escapeHTML(d.business_name)} 👋</h1><div class="d">Вот как обстоят дела у вашего бизнеса сегодня</div></div>
+    <button class="btn btn-primary" onclick="goPage('campaigns')">${ic('plus')} Новая акция</button>
+  </div>
+
+  <div class="grid g4" style="margin-bottom:18px">
+    ${statCardHTML('Общая выручка', formatKZT(d.total_revenue), null, '', 'chart')}
+    ${statCardHTML('Активные акции', String(d.active_campaigns_count), null, '', 'megaphone')}
+    ${statCardHTML('Клиентов в базе', String(d.total_customers), null, '', 'users')}
+    ${statCardHTML('Активных инструментов', String(d.active_tools_count), null, '', 'spark')}
+  </div>
+
+  <div style="margin-bottom:18px">${topRec ? recommendationBannerHTML(topRec) : ''}</div>
+
+  <div class="grid g2" style="margin-bottom:18px">
+    <div class="card card-pad">
+      <div class="card-title"><h3>Динамика выручки</h3><div class="chip active">6 месяцев</div></div>
+      ${lineChartSVG(trendVals)}
+    </div>
+    <div class="card card-pad">
+      <div class="card-title"><h3>Недавняя активность</h3></div>
+      ${(d.recent_activity||[]).length ? d.recent_activity.map(a=>`<div class="feed-item"><div class="feed-ic">${ic(activityIcon(a.type))}</div><div><div class="t">${escapeHTML(a.title)}</div><div class="ts">${formatDateTime(a.timestamp)}</div></div></div>`).join('') : '<div class="dim">Пока нет активности</div>'}
+    </div>
+  </div>
+
+  <div class="grid g2e">
+    <div class="card card-pad">
+      <div class="card-title"><h3>Топ клиенты</h3><a class="dim" style="font-size:12.5px;cursor:pointer" onclick="goPage('customers')">Все клиенты →</a></div>
+      <table><thead><tr><th>Клиент</th><th>Сегмент</th><th>Потрачено</th></tr></thead><tbody>
+        ${topCustomers.length ? topCustomers.map(c=>`<tr><td class="name-cell"><span class="av">${initials(c.name)}</span>${escapeHTML(c.name)}</td><td>${segBadgeHTML(c.segment)}</td><td class="mono">${formatKZT(c.total_spent)}</td></tr>`).join('') : '<tr><td class="dim">Нет клиентов</td></tr>'}
+      </tbody></table>
+    </div>
+    <div class="card card-pad">
+      <div class="card-title"><h3>Последние акции</h3><a class="dim" style="font-size:12.5px;cursor:pointer" onclick="goPage('campaigns')">Все акции →</a></div>
+      <table><thead><tr><th>Акция</th><th>Статус</th></tr></thead><tbody>
+        ${(d.recent_campaigns||[]).length ? d.recent_campaigns.map(c=>`<tr><td>${escapeHTML(c.title)}</td><td>${statusBadgeHTML(c.status)}</td></tr>`).join('') : '<tr><td class="dim">Акций пока нет</td></tr>'}
+      </tbody></table>
+    </div>
+  </div>`;
+}
+
+function lineChartSVG(values){
+  const pts = (values && values.length) ? values : [0,0,0,0,0,0];
+  const w=560,h=200, step = pts.length>1 ? w/(pts.length-1) : w, max=Math.max(...pts, 1);
+  const path = pts.map((p,i)=>`${i===0?'M':'L'} ${i*step} ${h-(p/max)*(h-20)-10}`).join(' ');
+  const area = path + ` L ${w} ${h} L 0 ${h} Z`;
+  return `<svg class="line-chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4B7F63" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#4B7F63" stop-opacity="0"/>
+    </linearGradient></defs>
+    <path class="area" d="${area}" fill="url(#lg)"/>
+    <path class="stroke" d="${path}" fill="none" stroke="#4B7F63" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+/* ---------------- RECOMMENDATIONS (used on dashboard banner + assistant panel) ---------------- */
+async function applyRecommendation(id){
+  try{ await apiFetch(`/recommendations/${id}/apply`, {method:'POST'}); showToast('Рекомендация применена'); await ensurePageData(state.page); rerenderPage(); }
+  catch(e){ showToast(e.message, 'error'); }
+}
+async function dismissRecommendation(id){
+  try{ await apiFetch(`/recommendations/${id}/dismiss`, {method:'POST'}); showToast('Рекомендация скрыта'); await ensurePageData(state.page); rerenderPage(); }
+  catch(e){ showToast(e.message, 'error'); }
+}
+async function regenerateRecommendations(){
+  try{ showToast('AI подбирает рекомендации…'); await apiFetch('/recommendations/generate', {method:'POST'}); await ensurePageData(state.page); rerenderPage(); }
+  catch(e){ showToast(e.message, 'error'); }
+}
+
+/* ---------------- AI ASSISTANT ---------------- */
+function pageAssistant(){
+  const recs = DATA.recommendations || [];
+  const pending = recs.filter(r=>r.status==='pending');
+  return `<div class="assist-wrap">
+    <div class="assist-col">
+      <button class="btn btn-outline btn-block btn-sm" style="margin-bottom:14px" onclick="showToast('Новый диалог создан')">${ic('plus')} Новый диалог</button>
+      <div class="conv-item active"><div class="t">Вторничный спад трафика</div><div class="faint">Сегодня, 14:02</div></div>
+      <div class="conv-item"><div class="t">Отток VIP-клиентов</div><div class="faint">Вчера</div></div>
+      <div class="conv-item"><div class="t">Идеи к запуску осенней линейки</div><div class="faint">3 дня назад</div></div>
+      <div class="conv-item"><div class="t">Разбор прошлой акции</div><div class="faint">Неделю назад</div></div>
+    </div>
+    <div class="chat-col">
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="msg"><div class="msg-avatar">${pulseOrbHTML('sm')}</div><div class="bubble">Заметил: по вторникам с 15:00 до 18:00 трафик падает на 18% по сравнению со средним. Хотите, предложу акцию на это время?</div></div>
+        <div class="msg me"><div class="msg-avatar">${state.user?initials(state.user.business_name):'АК'}</div><div class="bubble">Да, давай что-то с латте и выпечкой</div></div>
+        <div class="msg"><div class="msg-avatar">${pulseOrbHTML('sm')}</div>
+          <div>
+            <div class="bubble">Собрал акцию на основе истории продаж и погоды на вторник.</div>
+            <div class="suggest-card">
+              <div class="h">Счастливые часы: латте + круассан</div>
+              <p>15:00–18:00, скидка 20% на комбо. Прогноз: +34 чека, ROI ≈ +210%.</p>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-primary btn-sm" onclick="goPage('campaigns')">Запустить</button>
+                <button class="btn btn-ghost btn-sm" onclick="showToast('Хорошо, доработаю предложение')">Изменить</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input id="chatInput" placeholder="Спросите AI о бизнесе..." onkeydown="if(event.key==='Enter'){sendChatMessage()}"/>
+        <button class="btn btn-primary btn-sm" onclick="sendChatMessage()">${ic('arrowRight')}</button>
+      </div>
+    </div>
+    <div class="assist-col">
+      <div class="card-title" style="margin-bottom:10px">
+        <h3 style="font-size:13px">Рекомендации AI</h3>
+        <button class="btn btn-ghost btn-sm" style="padding:4px 8px" onclick="regenerateRecommendations()" title="Обновить рекомендации">${ic('refresh')}</button>
+      </div>
+      ${pending.length ? pending.map(r=>`
+        <div class="suggest-card" style="padding:13px;margin-top:0;margin-bottom:10px">
+          <div class="h" style="font-size:12.5px">${escapeHTML(r.title)}</div>
+          <p style="font-size:12px;margin-bottom:9px">${escapeHTML(r.reason || r.description)}</p>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-primary btn-sm" style="padding:5px 10px;font-size:12px" onclick="applyRecommendation(${r.id})">Применить</button>
+            <button class="btn btn-ghost btn-sm" style="padding:5px 10px;font-size:12px" onclick="dismissRecommendation(${r.id})">Скрыть</button>
+          </div>
+        </div>`).join('') : '<div class="dim" style="font-size:12.5px">Нет новых рекомендаций</div>'}
+    </div>
+  </div>`;
+}
+const AI_REPLIES = [
+  'Смотрю на последние данные по продажам — вот что вижу: в это время трафик обычно ниже среднего на 12–18%. Могу собрать точечную акцию под этот период.',
+  'Хороший вопрос. По истории чеков за последние 30 дней средний чек в это время держится стабильно — можно усилить его допродажей выпечки.',
+  'Проверил сегмент «Под риском»: несколько клиентов не заходили больше трёх недель. Предложить им персональную скидку на возврат?',
+];
+function sendChatMessage(){
+  const input = document.getElementById('chatInput');
+  const msgs = document.getElementById('chatMsgs');
+  if(!input || !msgs) return;
+  const val = input.value.trim();
+  if(!val) return;
+  const userBubble = document.createElement('div');
+  userBubble.className='msg me';
+  userBubble.innerHTML = `<div class="msg-avatar">${state.user?initials(state.user.business_name):'АК'}</div><div class="bubble">${escapeHTML(val)}</div>`;
+  msgs.appendChild(userBubble);
+  input.value='';
+  msgs.scrollTop = msgs.scrollHeight;
+
+  const typing = document.createElement('div');
+  typing.className='msg';
+  typing.innerHTML = `<div class="msg-avatar">${pulseOrbHTML('sm')}</div><div class="bubble typing-bubble"><span></span><span></span><span></span></div>`;
+  msgs.appendChild(typing);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  setTimeout(()=>{
+    typing.remove();
+    const reply = document.createElement('div');
+    reply.className='msg';
+    const text = AI_REPLIES[Math.floor(Math.random()*AI_REPLIES.length)];
+    reply.innerHTML = `<div class="msg-avatar">${pulseOrbHTML('sm')}</div><div class="bubble">${text}</div>`;
+    msgs.appendChild(reply);
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 1100);
+}
+
+/* ---------------- CAMPAIGNS (real AI generation + QR + growth simulation) ---------------- */
+function setCampaignFormField(field, value){
+  state.campaignForm[field] = value;
+  rerenderPage();
+}
+async function generateCampaign(){
+  try{
+    showToast('AI собирает акцию…');
+    const f = state.campaignForm;
+    const campaign = await apiFetch('/campaigns', {method:'POST', body:{
+      campaign_type: f.campaign_type, channel: f.channel, segment: f.segment,
+      discount_value: Number(f.discount_value), use_ai:true,
+    }});
+    state.generatedCampaign = campaign;
+    await ensurePageData('campaigns');
+    rerenderPage();
+    showToast(campaign.generated_by_ai ? 'Акция сгенерирована через Claude' : 'Акция создана из шаблона (нет ключа Anthropic)');
+  }catch(e){ showToast(e.message, 'error'); }
+}
+async function setCampaignStatus(id, status){
+  try{ await apiFetch(`/campaigns/${id}/status`, {method:'PATCH', body:{status}}); await ensurePageData('campaigns'); rerenderPage(); showToast('Статус акции обновлён'); }
+  catch(e){ showToast(e.message, 'error'); }
+}
+async function simulateCampaignGrowth(id){
+  try{ await apiFetch(`/campaigns/${id}/simulate-redemption`, {method:'POST'}); await ensurePageData('campaigns'); rerenderPage(); showToast('+1 отклик на акцию'); }
+  catch(e){ showToast(e.message, 'error'); }
+}
+async function showCampaignQr(id){
+  try{
+    const blob = await apiFetchBlob(`/campaigns/${id}/qr.png`);
+    const url = URL.createObjectURL(blob);
+    let host = document.getElementById('qrModalHost');
+    if(host) host.remove();
+    host = document.createElement('div');
+    host.id='qrModalHost';
+    host.style.cssText='position:fixed;inset:0;background:rgba(38,37,31,.5);display:flex;align-items:center;justify-content:center;z-index:998;';
+    host.onclick = ()=>host.remove();
+    host.innerHTML = `<div class="card" style="padding:24px;text-align:center" onclick="event.stopPropagation()">
+      <img src="${url}" style="width:220px;height:220px;border-radius:12px;display:block"/>
+      <div style="margin-top:14px"><button class="btn btn-outline btn-sm" onclick="document.getElementById('qrModalHost').remove()">Закрыть</button></div>
+    </div>`;
+    document.body.appendChild(host);
+  }catch(e){ showToast(e.message, 'error'); }
+}
+function pageCampaigns(){
+  const f = state.campaignForm;
+  const g = state.generatedCampaign;
+  const campaigns = DATA.campaigns || [];
+  const chipRow = (options, field) => options.map(o=>`<div class="chip ${f[field]===o.key?'active':''}" onclick="setCampaignFormField('${field}','${o.key}')">${o.label}</div>`).join('');
+  return `
+  <div class="page-head">
+    <div><h1>Акции</h1><div class="d">Создавайте маркетинговые акции вместе с AI</div></div>
+  </div>
+
+  <div class="grid g2" style="margin-bottom:20px">
+    <div class="card gen-panel">
+      <div class="card-title"><h3>Генератор акций</h3></div>
+      <label class="faint" style="font-size:12.5px;display:block;margin-bottom:8px">Тип акции</label>
+      <div class="goal-chips">${chipRow([{key:'discount',label:'Скидка'},{key:'bonus',label:'Бонус'},{key:'coupon',label:'Купон'},{key:'combo',label:'Комбо'}], 'campaign_type')}</div>
+      <label class="faint" style="font-size:12.5px;display:block;margin-bottom:8px">Канал</label>
+      <div class="goal-chips">${chipRow([{key:'sms',label:'SMS'},{key:'email',label:'Email'},{key:'social',label:'Соцсети'},{key:'qr',label:'QR-код'}], 'channel')}</div>
+      <label class="faint" style="font-size:12.5px;display:block;margin-bottom:8px">Сегмент клиентов</label>
+      <div class="goal-chips">${chipRow([{key:'all',label:'Все'},{key:'new',label:'Новые'},{key:'regular',label:'Постоянные'},{key:'vip',label:'VIP'},{key:'at_risk',label:'Под риском'}], 'segment')}</div>
+      <label class="faint" style="font-size:12.5px;display:block;margin-bottom:8px">Скидка/бонус: <span class="mono" id="discountValLabel">${f.discount_value}%</span></label>
+      <input type="range" class="slider" min="5" max="50" step="1" value="${f.discount_value}" style="margin-bottom:22px"
+        oninput="document.getElementById('discountValLabel').textContent=this.value+'%'; state.campaignForm.discount_value=Number(this.value);"/>
+      <button class="btn btn-primary btn-block" onclick="generateCampaign()">${ic('spark')} Сгенерировать с AI</button>
+    </div>
+
+    ${g ? `
+    <div class="card gen-result">
+      <span class="badge ${g.generated_by_ai?'badge-violet':'badge-neutral'}" style="margin-bottom:14px">${g.generated_by_ai?'Сгенерировано AI':'Шаблон'}</span>
+      <h3>${escapeHTML(g.title)}</h3>
+      <p>${escapeHTML(g.text)}</p>
+      <div class="channel-row"><span class="channel-pill">${ic(CHANNEL_META[g.channel]?CHANNEL_META[g.channel].icon:'bolt')} ${CHANNEL_META[g.channel]?CHANNEL_META[g.channel].label:g.channel}</span></div>
+      <div class="metric-row">
+        <div class="m"><div class="v">${g.discount_value}%</div><div class="l">Скидка</div></div>
+        <div class="m"><div class="v">${g.sent_count}</div><div class="l">Отправлено</div></div>
+        <div class="m"><div class="v" style="color:var(--mint)">${formatROI(g.predicted_roi)}</div><div class="l">Прогноз ROI</div></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="setCampaignStatus(${g.id},'active')">${ic('check')} Одобрить и запустить</button>
+        <button class="btn btn-outline btn-sm" onclick="showCampaignQr(${g.id})">${ic('qrcode')} Показать QR</button>
+        <button class="btn btn-ghost btn-sm" onclick="simulateCampaignGrowth(${g.id})">Симулировать визит +1</button>
+      </div>
+    </div>` : `
+    <div class="card gen-result" style="display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:13.5px;text-align:center">Настройте параметры слева и нажмите «Сгенерировать с AI»</div>`}
+  </div>
+
+  <div class="card card-pad">
+    <div class="card-title"><h3>Все акции</h3></div>
+    <table><thead><tr><th>Акция</th><th>Канал</th><th>Статус</th><th>Отправлено</th><th>Погашено</th><th>ROI</th><th></th></tr></thead><tbody>
+      ${campaigns.length ? campaigns.map(c=>`<tr>
+        <td>${escapeHTML(c.title)}</td>
+        <td>${ic(CHANNEL_META[c.channel]?CHANNEL_META[c.channel].icon:'bolt')}</td>
+        <td>${statusBadgeHTML(c.status)}</td>
+        <td class="mono">${c.sent_count}</td>
+        <td class="mono">${c.redeemed_count}</td>
+        <td class="mono">${formatROI(c.predicted_roi)}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-ghost btn-sm" onclick="showCampaignQr(${c.id})" title="QR-код">${ic('qrcode')}</button>
+          <button class="btn btn-ghost btn-sm" onclick="simulateCampaignGrowth(${c.id})" title="+1 визит">${ic('plus')}</button>
+          ${c.status!=='active'?`<button class="btn btn-ghost btn-sm" onclick="setCampaignStatus(${c.id},'active')" title="Запустить">${ic('check')}</button>`:`<button class="btn btn-ghost btn-sm" onclick="setCampaignStatus(${c.id},'paused')" title="Пауза">${ic('clock')}</button>`}
+        </td>
+      </tr>`).join('') : `<tr><td class="dim" colspan="7">Пока нет акций — создайте первую слева</td></tr>`}
+    </tbody></table>
+  </div>`;
+}
+
+/* ---------------- CUSTOMERS (CRM) ---------------- */
+function toggleAddCustomerForm(){ state.addCustomerOpen = !state.addCustomerOpen; rerenderPage(); }
+async function submitAddCustomer(){
+  const name = document.getElementById('ncName').value.trim();
+  if(!name){ showToast('Введите имя клиента', 'error'); return; }
+  const payload = {
+    name,
+    phone: document.getElementById('ncPhone').value.trim() || null,
+    first_visit: document.getElementById('ncFirst').value,
+    last_visit: document.getElementById('ncLast').value,
+    visits_count: Number(document.getElementById('ncVisits').value) || 1,
+    total_spent: Number(document.getElementById('ncSpent').value) || 0,
+  };
+  try{
+    await apiFetch('/customers', {method:'POST', body:payload});
+    state.addCustomerOpen = false;
+    showToast('Клиент добавлен');
+    await ensurePageData('customers');
+    rerenderPage();
+  }catch(e){ showToast(e.message, 'error'); }
+}
+function pageCustomers(){
+  const customers = DATA.customers || [];
+  const segments = DATA.customerSegments || [];
+  const totalCustomers = customers.length;
+  const vipCount = (segments.find(s=>s.segment==='vip')||{}).count || 0;
+  const atRiskCount = (segments.find(s=>s.segment==='at_risk')||{}).count || 0;
+  const avgLtv = totalCustomers ? customers.reduce((s,c)=>s+c.total_spent,0)/totalCustomers : 0;
+  const today = new Date().toISOString().slice(0,10);
+  return `
+  <div class="page-head">
+    <div><h1>Клиенты</h1><div class="d">CRM с AI-оценкой клиентской базы</div></div>
+    <button class="btn btn-primary" onclick="toggleAddCustomerForm()">${ic('plus')} Добавить клиента</button>
+  </div>
+  <div class="grid g4" style="margin-bottom:18px">
+    ${statCardHTML('Всего клиентов', String(totalCustomers), null, '', 'users')}
+    ${statCardHTML('VIP-клиенты', String(vipCount), null, '', 'spark')}
+    ${statCardHTML('Под риском оттока', String(atRiskCount), null, '', 'downRight')}
+    ${statCardHTML('Средний LTV', formatKZT(avgLtv), null, '', 'chart')}
+  </div>
+  ${state.addCustomerOpen ? `
+  <div class="card card-pad" style="margin-bottom:18px">
+    <div class="card-title"><h3>Новый клиент</h3></div>
+    <div class="form-grid">
+      <div><label>Имя</label><input id="ncName" placeholder="Имя клиента"/></div>
+      <div><label>Телефон</label><input id="ncPhone" placeholder="+7 700 000 00 00"/></div>
+      <div><label>Первый визит</label><input id="ncFirst" type="date" value="${today}"/></div>
+      <div><label>Последний визит</label><input id="ncLast" type="date" value="${today}"/></div>
+      <div><label>Кол-во визитов</label><input id="ncVisits" type="number" min="1" value="1"/></div>
+      <div><label>Всего потрачено (₸)</label><input id="ncSpent" type="number" min="0" value="0"/></div>
+      <div class="full" style="display:flex;gap:10px;margin-top:6px">
+        <button class="btn btn-primary" onclick="submitAddCustomer()">Сохранить</button>
+        <button class="btn btn-ghost" onclick="toggleAddCustomerForm()">Отмена</button>
+      </div>
+    </div>
+  </div>` : ''}
+  <div class="card card-pad">
+    <div class="card-title"><h3>База клиентов</h3></div>
+    <table><thead><tr><th>Клиент</th><th>Сегмент</th><th>AI-оценка</th><th>Риск оттока</th><th>Последний визит</th><th>Потрачено</th></tr></thead><tbody>
+      ${customers.length ? customers.map(c=>`<tr>
+        <td class="name-cell"><span class="av">${initials(c.name)}</span>${escapeHTML(c.name)}</td>
+        <td>${segBadgeHTML(c.segment)}</td>
+        <td><span class="score" style="color:${scoreColor(c.value_score)}">${Math.round(c.value_score)}</span></td>
+        <td><span class="score" style="color:${scoreColor(100-c.churn_risk_score)}">${Math.round(c.churn_risk_score)}</span></td>
+        <td class="dim">${formatRelativeDate(c.last_visit)}</td>
+        <td class="mono">${formatKZT(c.total_spent)}</td>
+      </tr>`).join('') : `<tr><td class="dim" colspan="6">Клиентов пока нет — добавьте первого</td></tr>`}
+    </tbody></table>
+  </div>`;
+}
+
+/* ---------------- ANALYTICS ---------------- */
+function pageAnalytics(){
+  const a = DATA.analytics;
+  if(!a) return `<div class="dim">Загрузка аналитики...</div>`;
+  const segs = DATA.customerSegments || [];
+  const totalSegCount = segs.reduce((s,x)=>s+x.count,0) || 1;
+  let acc=0;
+  const donutStops = segs.map(s=>{
+    const pct = Math.round((s.count/totalSegCount)*100);
+    const from=acc; acc+=pct;
+    const color = (SEGMENT_META[s.segment]||{}).color || '#A39C8A';
+    return `${color} ${from}% ${acc}%`;
+  }).join(', ');
+  const trendVals = a.revenue_trend.map(t=>t.revenue);
+  const trendChangePct = (trendVals.length>1 && trendVals[0]>0) ? Math.round(((trendVals[trendVals.length-1]-trendVals[0])/trendVals[0])*100) : 0;
+
+  const insights = [];
+  if(trendChangePct !== 0) insights.push(`Выручка ${trendChangePct>=0?'выросла':'снизилась'} на ${Math.abs(trendChangePct)}% за отслеживаемый период.`);
+  const atRisk = segs.find(s=>s.segment==='at_risk');
+  if(atRisk && atRisk.count>0) insights.push(`${atRisk.count} клиент(ов) в зоне риска оттока на сумму ${formatKZT(atRisk.total_spent)} — рекомендуем запустить акцию возврата.`);
+  const bestChannel = (a.channel_performance||[]).slice().sort((x,y)=>y.conversion_rate-x.conversion_rate)[0];
+  if(bestChannel) insights.push(`Канал «${CHANNEL_META[bestChannel.channel]?CHANNEL_META[bestChannel.channel].label:bestChannel.channel}» конвертирует лучше остальных — ${bestChannel.conversion_rate}%.`);
+  if(!insights.length) insights.push('Пока недостаточно данных для выводов — запустите первую акцию и добавьте клиентов.');
+
+  return `
+  <div class="page-head">
+    <div><h1>Аналитика</h1><div class="d">Графики, метрики и выводы AI</div></div>
+    <div class="chip active">Последние 6 месяцев</div>
+  </div>
+  <div class="card card-pad" style="margin-bottom:18px">
+    <div class="card-title"><h3>Динамика выручки</h3><span class="trend ${trendChangePct>=0?'up':'down'}">${ic(trendChangePct>=0?'upRight':'downRight')} ${trendChangePct>=0?'+':''}${trendChangePct}%</span></div>
+    ${lineChartSVG(trendVals)}
+  </div>
+  <div class="grid g3" style="margin-bottom:18px">
+    <div class="card card-pad">
+      <div class="card-title"><h3>Новые vs повторные</h3></div>
+      <div class="bars">
+        <div class="bar-wrap"><div class="bar hi" style="height:${Math.max(6,a.new_customers*8)}px"></div><div class="lbl">Новые (${a.new_customers})</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:${Math.max(6,a.repeat_customers*8)}px"></div><div class="lbl">Повторные (${a.repeat_customers})</div></div>
+      </div>
+    </div>
+    <div class="card card-pad">
+      <div class="card-title"><h3>Сегменты клиентов</h3></div>
+      <div class="donut" style="background:conic-gradient(${donutStops||'#E9E3D6 0 100%'})"></div>
+      <div class="legend">
+        ${segs.length ? segs.map(s=>`<div class="row"><span class="sw" style="background:${(SEGMENT_META[s.segment]||{}).color||'#A39C8A'}"></span> ${(SEGMENT_META[s.segment]||{}).label||s.segment} — ${s.count}</div>`).join('') : '<div class="dim">Нет данных</div>'}
+      </div>
+    </div>
+    <div class="card card-pad">
+      <div class="card-title"><h3>Конверсия по каналам</h3></div>
+      <div style="display:flex;flex-direction:column;gap:16px;margin-top:6px">
+        ${(a.channel_performance||[]).length ? a.channel_performance.map(cp=>`
+        <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>${CHANNEL_META[cp.channel]?CHANNEL_META[cp.channel].label:cp.channel}</span><span class="mono">${cp.conversion_rate}%</span></div><div style="height:6px;background:var(--surface-3);border-radius:4px"><div style="width:${Math.min(100,cp.conversion_rate)}%;height:100%;background:var(--grad-1);border-radius:4px"></div></div></div>`).join('') : '<div class="dim">Пока нет акций</div>'}
+      </div>
+    </div>
+  </div>
+  <div class="card card-pad">
+    <div class="card-title"><h3>Выводы AI</h3></div>
+    ${insights.map(i=>`<div class="feed-item"><div class="feed-ic">${ic('spark')}</div><div class="t">${i}</div></div>`).join('')}
+  </div>`;
+}
+
+/* ---------------- SETTINGS ---------------- */
+function pageSettings(){
+  const tabs=[{id:'business',l:'Бизнес'},{id:'account',l:'Аккаунт'},{id:'notify',l:'Уведомления'},{id:'billing',l:'Оплата'}];
+  return `
+  <div class="page-head"><div><h1>Настройки</h1><div class="d">Управление бизнесом и аккаунтом</div></div></div>
+  <div class="tabs-h">${tabs.map(t=>`<div class="tab-h ${state.settingsTab===t.id?'active':''}" onclick="switchSettingsTab('${t.id}')">${t.l}</div>`).join('')}</div>
+  <div class="card card-pad">${settingsTabContent()}</div>`;
+}
+function settingsTabContent(){
+  const u = state.user;
+  if(!u) return '<div class="dim">Загрузка...</div>';
+  if(state.settingsTab==='business'){
+    const b = u.business || {business_type:'other', size:'small', goal:'new_customers', avg_check:0, city:''};
+    return `<div class="form-grid">
+      <div><label>Тип бизнеса</label><select id="setBizType">${BUSINESS_TYPE_OPTIONS.map(o=>`<option value="${o.key}" ${b.business_type===o.key?'selected':''}>${o.label}</option>`).join('')}</select></div>
+      <div><label>Размер</label><select id="setBizSize">${SIZE_OPTIONS.map(o=>`<option value="${o.key}" ${b.size===o.key?'selected':''}>${o.label}</option>`).join('')}</select></div>
+      <div><label>Цель</label><select id="setBizGoal">${GOAL_OPTIONS.map(o=>`<option value="${o.key}" ${b.goal===o.key?'selected':''}>${o.label}</option>`).join('')}</select></div>
+      <div><label>Средний чек (₸)</label><input id="setBizAvgCheck" type="number" min="0" value="${b.avg_check||0}"/></div>
+      <div class="full"><label>Город</label><input id="setBizCity" value="${escapeHTML(b.city||'')}"/></div>
+      <div class="full" style="margin-top:8px"><button class="btn btn-primary" onclick="saveBusinessSettings()">Сохранить изменения</button></div>
+    </div>`;
+  }
+  if(state.settingsTab==='account'){
+    return `<div class="form-grid">
+      <div><label>Название бизнеса</label><input id="setAccName" value="${escapeHTML(u.business_name)}"/></div>
+      <div><label>Email</label><input value="${escapeHTML(u.email)}" disabled/></div>
+      <div class="full" style="margin-top:8px"><button class="btn btn-primary" onclick="saveAccountSettings()">Сохранить изменения</button></div>
+    </div>`;
+  }
+  if(state.settingsTab==='notify'){
+    return `
+    <div class="toggle-row"><div><div class="t">AI-рекомендации</div><div class="s">Получать уведомления о новых предложениях AI</div></div>${switchHTML(true,'n1')}</div>
+    <div class="toggle-row"><div><div class="t">Запуск акций</div><div class="s">Оповещение, когда акция запускается автоматически</div></div>${switchHTML(true,'n2')}</div>
+    <div class="toggle-row"><div><div class="t">Еженедельный отчёт</div><div class="s">Сводка по email каждый понедельник</div></div>${switchHTML(false,'n3')}</div>
+    <div class="toggle-row"><div><div class="t">Риск оттока клиентов</div><div class="s">Предупреждать, когда клиент переходит в зону риска</div></div>${switchHTML(true,'n4')}</div>`;
+  }
+  return `
+  <div class="card card-pad" style="background:var(--surface-2);margin-bottom:20px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-weight:600;margin-bottom:4px">Тариф Pro</div><div class="dim" style="font-size:13px">29 900 ₸ / месяц · безлимит акций</div></div>
+      <button class="btn btn-outline btn-sm" onclick="showToast('Открываю тарифы')">Сменить тариф</button>
+    </div>
+  </div>
+  <div class="toggle-row"><div><div class="t">Способ оплаты</div><div class="s">Visa •••• 4821</div></div><button class="btn btn-ghost btn-sm" onclick="showToast('Открываю способы оплаты')">Изменить</button></div>
+  <div class="toggle-row"><div><div class="t">Следующее списание</div><div class="s">1 сентября 2026</div></div></div>`;
+}
+function switchHTML(on,id){
+  return `<div class="switch ${on?'on':''}" id="${id}" onclick="this.classList.toggle('on')"><div class="knob"></div></div>`;
+}
+async function saveBusinessSettings(){
+  const payload = {
+    business_type: document.getElementById('setBizType').value,
+    size: document.getElementById('setBizSize').value,
+    goal: document.getElementById('setBizGoal').value,
+    avg_check: Number(document.getElementById('setBizAvgCheck').value) || 0,
+    city: document.getElementById('setBizCity').value || null,
+  };
+  try{
+    state.user = await apiFetch('/auth/business', {method:'PATCH', body:payload});
+    showToast('Изменения сохранены — рекомендации обновлены');
+  }catch(e){ showToast(e.message, 'error'); }
+}
+async function saveAccountSettings(){
+  const name = document.getElementById('setAccName').value.trim();
+  if(!name){ showToast('Название не может быть пустым', 'error'); return; }
+  try{
+    state.user = await apiFetch('/auth/me', {method:'PATCH', body:{business_name:name}});
+    showToast('Изменения сохранены');
+    rerenderPage();
+  }catch(e){ showToast(e.message, 'error'); }
+}
+
+/* ---------------- ADMIN ---------------- */
+async function adminAddTool(){
+  const name = document.getElementById('atName').value.trim();
+  const description = document.getElementById('atDesc').value.trim();
+  const category_id = Number(document.getElementById('atCategory').value);
+  const tool_type = document.getElementById('atType').value;
+  if(!name || !description){ showToast('Заполните название и описание', 'error'); return; }
+  try{
+    await apiFetch('/admin/tools', {method:'POST', body:{name, description, category_id, tool_type}});
+    showToast('Инструмент добавлен');
+    await ensurePageData('admin');
+    rerenderPage();
+  }catch(e){ showToast(e.message, 'error'); }
+}
+async function adminEditTool(id){
+  const tool = (DATA.adminTools||[]).find(t=>t.id===id);
+  const newDesc = prompt('Новое описание инструмента:', tool?tool.description:'');
+  if(newDesc===null) return;
+  try{
+    await apiFetch(`/admin/tools/${id}`, {method:'PUT', body:{description:newDesc}});
+    showToast('Инструмент обновлён');
+    await ensurePageData('admin');
+    rerenderPage();
+  }catch(e){ showToast(e.message, 'error'); }
+}
+async function adminDeleteTool(id){
+  if(!confirm('Удалить инструмент из каталога?')) return;
+  try{
+    await apiFetch(`/admin/tools/${id}`, {method:'DELETE'});
+    showToast('Инструмент удалён');
+    await ensurePageData('admin');
+    rerenderPage();
+  }catch(e){ showToast(e.message, 'error'); }
+}
+function pageAdmin(){
+  const stats = DATA.adminStats;
+  const users = DATA.adminUsers || [];
+  const tools = DATA.adminTools || [];
+  const categories = DATA.adminCategories || [];
+  if(!stats) return '<div class="dim">Загрузка данных администратора...</div>';
+  return `
+  <div class="page-head">
+    <div><h1>Админ-панель <span class="admin-badge" style="margin-left:8px">${ic('shield')} Только для админов</span></h1><div class="d">Управление платформой UpWise</div></div>
+  </div>
+  <div class="grid g4" style="margin-bottom:18px">
+    ${statCardHTML('Бизнесов на платформе', String(stats.total_businesses), null, '', 'building')}
+    ${statCardHTML('MRR (оценка)', formatKZT(stats.mrr_estimate), null, '', 'chart')}
+    ${statCardHTML('Активных акций', String(stats.active_campaigns), null, '', 'megaphone')}
+    ${statCardHTML('Клиентов в системе', String(stats.total_customers), null, '', 'users')}
+  </div>
+  <div class="grid g2" style="margin-bottom:18px">
+    <div class="card card-pad">
+      <div class="card-title"><h3>Бизнесы на платформе</h3></div>
+      <table><thead><tr><th>Бизнес</th><th>Email</th><th>Тип</th><th>Регистрация</th></tr></thead><tbody>
+        ${users.map(u=>`<tr><td>${escapeHTML(u.business_name)}${u.is_admin?' <span class="admin-badge" style="margin-left:6px;font-size:9px">admin</span>':''}</td><td class="dim">${escapeHTML(u.email)}</td><td>${u.business_type?labelFor(BUSINESS_TYPE_OPTIONS,u.business_type):'—'}</td><td class="dim">${formatDateTime(u.created_at)}</td></tr>`).join('')}
+      </tbody></table>
+    </div>
+    <div class="card card-pad">
+      <div class="card-title"><h3>Состояние системы</h3></div>
+      <div class="health-row"><span class="dim">${ic('server')} API</span><span style="display:flex;align-items:center;gap:6px"><span class="health-dot"></span> ${stats.system_health==='operational'?'Норма':stats.system_health}</span></div>
+      <div class="health-row"><span class="dim">${ic('spark')} AI-движок</span><span style="display:flex;align-items:center;gap:6px"><span class="health-dot"></span> Норма</span></div>
+      <div class="health-row" style="border-bottom:none;padding-bottom:4px"><span class="dim">Популярные инструменты</span></div>
+      ${(stats.popular_tools||[]).length ? stats.popular_tools.map(t=>`<div class="health-row"><span class="dim">${escapeHTML(t.name)}</span><span class="mono">${t.activations}</span></div>`).join('') : '<div class="health-row"><span class="dim">Пока нет активаций</span></div>'}
+    </div>
+  </div>
+  <div class="card card-pad">
+    <div class="card-title"><h3>Управление инструментами</h3></div>
+    <div class="form-grid" style="margin-bottom:20px">
+      <div><label>Название</label><input id="atName" placeholder="Название инструмента"/></div>
+      <div><label>Категория</label><select id="atCategory">${categories.map(c=>`<option value="${c.id}">${escapeHTML(c.name)}</option>`).join('')}</select></div>
+      <div><label>Тип</label><select id="atType">${['marketing','sales','retention','analytics','automation'].map(t=>`<option value="${t}">${t}</option>`).join('')}</select></div>
+      <div class="full"><label>Описание</label><input id="atDesc" placeholder="Короткое описание для каталога"/></div>
+      <div class="full"><button class="btn btn-primary btn-sm" onclick="adminAddTool()">${ic('plus')} Добавить инструмент</button></div>
+    </div>
+    <table><thead><tr><th>Инструмент</th><th>Категория</th><th>Тип</th><th></th></tr></thead><tbody>
+      ${tools.map(t=>`<tr><td>${escapeHTML(t.name)}</td><td class="dim">${escapeHTML(t.category.name)}</td><td class="dim">${t.tool_type}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-ghost btn-sm" onclick="adminEditTool(${t.id})" title="Редактировать описание">${ic('edit')}</button>
+          <button class="btn btn-ghost btn-sm" onclick="adminDeleteTool(${t.id})" title="Удалить">${ic('trash')}</button>
+        </td>
+      </tr>`).join('')}
+    </tbody></table>
+  </div>`;
+}
+
+const PAGES = { dashboard:pageDashboard, assistant:pageAssistant, campaigns:pageCampaigns, customers:pageCustomers, analytics:pageAnalytics, settings:pageSettings, admin:pageAdmin };
+
+/* ============================================================
+   RENDER ROOT
+============================================================ */
+function render(){
+  const root = document.getElementById('app');
+  if(state.view==='landing') root.innerHTML = renderLanding();
+  else if(state.view==='login') root.innerHTML = renderLogin();
+  else root.innerHTML = renderShell();
+  animateCountUps();
+}
+
+/* ---------------- BOOT SEQUENCE ---------------- */
+function renderBootSkeleton(){
+  return `<div class="boot">
+    <div class="boot-orb">${pulseOrbHTML()}</div>
+    <div class="boot-msg" id="bootMsg">Подключаемся к UpWise...</div>
+    <div class="boot-cards">
+      <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+    </div>
+  </div>`;
+}
+async function bootSequence(){
+  const root = document.getElementById('app');
+  const messages = ['Подключаемся к UpWise...','Загружаем данные бизнеса...','Синхронизируем аналитику...','Почти готово...'];
+  root.innerHTML = renderBootSkeleton();
+  let i=0;
+  const iv = setInterval(()=>{
+    i=(i+1)%messages.length;
+    const el=document.getElementById('bootMsg');
+    if(el){ el.style.opacity=0; setTimeout(()=>{ el.textContent=messages[i]; el.style.transition='opacity .2s'; el.style.opacity=1; },150); }
+  },520);
+
+  const minDelay = new Promise(res=>setTimeout(res,1550));
+  const authCheck = (async()=>{
+    const token = getToken();
+    if(!token) return;
+    try{
+      await refreshMe();
+      await ensurePageData('dashboard');
+      state.view = 'dashboard'; state.page = 'dashboard';
+    }catch(e){
+      setToken(null); state.user = null;
+    }
+  })();
+
+  await Promise.all([minDelay, authCheck]);
+  clearInterval(iv);
+  render();
+}
+bootSequence();
+</script>
+</body>
+</html>
