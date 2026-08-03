@@ -516,7 +516,7 @@ const ic = (name, cls='') => `<svg class="${cls}" viewBox="0 0 20 20" fill="none
 /* ============================================================
    BACKEND API BASE — override with ?api=https://your-backend or window.UPWISE_API_BASE
 ============================================================ */
-const API_BASE = new URLSearchParams(location.search).get('api') || window.UPWISE_API_BASE || 'http://localhost:8000';
+const API_BASE = new URLSearchParams(location.search).get('api') || window.UPWISE_API_BASE || 'https://pulse-2-gh0a.onrender.com';
 
 function getToken(){ return localStorage.getItem('upwise_token'); }
 function setToken(t){ if(t) localStorage.setItem('upwise_token', t); else localStorage.removeItem('upwise_token'); }
