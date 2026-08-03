@@ -1,3 +1,5 @@
+import logging
+import sys
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -8,16 +10,29 @@ from app.database import Base, SessionLocal, engine
 from app.routers import admin, analytics, auth, campaigns, customers, dashboard, meta, recommendations, tools
 from app.seed_data import seed
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 settings = get_settings()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    Base.metadata.create_all(bind=engine)
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        logger.error(f"Failed to create database tables. Check DATABASE_URL ({settings.database_url}). "
+                     f"Error: {type(e).__name__}: {e}")
+        sys.exit(1)
+
     if settings.seed_on_startup:
         db = SessionLocal()
         try:
             seed(db)
+        except Exception as e:
+            logger.error(f"Failed to seed database on startup. Error: {type(e).__name__}: {e}")
+            db.close()
+            sys.exit(1)
         finally:
             db.close()
     yield
@@ -56,4 +71,4 @@ def root():
 
 @app.get("/health", tags=["health"])
 def health():
-    return {"status": "healthy"}
+    return {"status": "ok"}

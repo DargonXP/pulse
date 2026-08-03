@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     app_name: str = "UpWise API"
     environment: str = "development"
 
-    database_url: str = "sqlite:///./upwise.db"
+    database_url: str = "sqlite:///./upwise.db"  # In production (Render), override via DATABASE_URL env var, e.g. sqlite:////var/data/upwise.db
 
     secret_key: str = "dev-secret-change-me-in-production"
     algorithm: str = "HS256"
